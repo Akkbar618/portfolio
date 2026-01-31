@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { ANIMATION_DELAYS } from "@/constants/animation.constants";
 import { projects } from "@/data/projects";
-import { ChevronLeft, ChevronRight, Bot, Smartphone, Shield, Gift } from "lucide-react";
+import { ChevronLeft, ChevronRight, Bot, Smartphone, Shield, Gift, ArrowRight } from "lucide-react";
 
 const projectStyles = [
     { gradient: "bg-gradient-to-br from-violet-500 to-fuchsia-500", icon: Bot, accent: "text-violet-600 dark:text-violet-400", hoverBorder: "hover:border-violet-500 dark:hover:border-violet-400" },
@@ -98,6 +99,8 @@ export const Projects = () => {
 
     // Mouse drag handlers
     const handleMouseDown = (e: React.MouseEvent) => {
+        if ((e.target as HTMLElement).closest('a, button')) return;
+
         touchStartX.current = e.clientX;
         isDragging.current = true;
         e.preventDefault();
@@ -217,6 +220,15 @@ export const Projects = () => {
                                             </span>
                                         ))}
                                     </div>
+
+                                    {/* 4. Link */}
+                                    <Link
+                                        to={`/projects/${project.slug}`}
+                                        className={`inline-flex items-center gap-2 font-semibold ${style.accent} hover:opacity-80 transition-opacity mt-6`}
+                                        aria-label={`View details for ${project.title}`}
+                                    >
+                                        View Project <ArrowRight className="w-4 h-4" />
+                                    </Link>
                                 </div>
                             </div>
                         </div>
