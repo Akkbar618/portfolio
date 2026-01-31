@@ -187,31 +187,31 @@ export const Projects = () => {
                         >
                             <div
                                 key={currentIndex}
-                                className={`bg-white dark:bg-slate-800/50 rounded-[2rem] border-2 border-gray-100 dark:border-slate-700/50 overflow-hidden shadow-lg flex flex-col md:flex-row group ${style.hoverBorder} hover:-translate-y-1 hover:shadow-2xl transition-all duration-500 ease-out ${slideDirection === 'left' ? 'animate-slide-left' : 'animate-slide-right'}`}
+                                className={`bg-white dark:bg-slate-800/50 rounded-[2rem] border-2 border-gray-100 dark:border-slate-700/50 overflow-hidden shadow-lg flex flex-col md:flex-row group ${style.hoverBorder} transition-colors duration-300 ${slideDirection === 'left' ? 'animate-slide-left' : 'animate-slide-right'}`}
                             >
-                                {/* Gradient Placeholder with Icon - FIRST on mobile */}
-                                <div className={`flex-1 ${style.gradient} relative flex items-center justify-center p-8 md:p-12 min-h-[280px] md:min-h-[400px] order-1`}>
-                                    <div className="relative w-40 md:w-56 aspect-[9/19] rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white/20 bg-white/10 backdrop-blur-sm transform group-hover:scale-105 transition-transform duration-500 flex items-center justify-center">
-                                        <IconComponent className="w-16 md:w-20 h-16 md:h-20 text-white/60" strokeWidth={1.5} />
+                                {/* Gradient Placeholder with Icon */}
+                                <div className={`flex-1 ${style.gradient} relative flex items-center justify-center p-8 md:p-12 min-h-[240px] md:min-h-[360px] order-1`}>
+                                    <div className="relative w-36 md:w-48 aspect-[9/19] rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                                        <IconComponent className="w-14 md:w-18 h-14 md:h-18 text-white/40" strokeWidth={1} />
                                     </div>
                                 </div>
 
-                                {/* Text Content */}
-                                <div className="flex-1 p-6 md:p-12 flex flex-col justify-center items-start order-2">
-                                    <span className={`text-xs font-bold tracking-widest ${style.accent} mb-3 uppercase`}>
-                                        {project.technologies[0]}
-                                    </span>
-                                    <h3 className="text-2xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">{project.title}</h3>
-                                    <p className="text-gray-600 dark:text-slate-300 mb-6 md:mb-8 leading-relaxed text-sm md:text-base">
-                                        {project.description.length > 200
-                                            ? project.description.substring(0, 200) + '...'
-                                            : project.description}
+                                {/* Text Content - Simplified order: Title, Description, Tags */}
+                                <div className="flex-1 p-6 md:p-10 flex flex-col justify-center items-start order-2">
+                                    {/* 1. Title */}
+                                    <h3 className="text-2xl md:text-3xl font-bold mb-3 text-gray-900 dark:text-white">{project.title}</h3>
+
+                                    {/* 2. Description - Fixed height with line-clamp */}
+                                    <p className="text-gray-600 dark:text-slate-300 mb-5 leading-relaxed text-sm md:text-base line-clamp-3">
+                                        {project.description}
                                     </p>
+
+                                    {/* 3. Tech tags - Unified rounded-full design */}
                                     <div className="flex flex-wrap gap-2">
-                                        {project.technologies.slice(0, 3).map((tech) => (
+                                        {project.technologies.slice(0, 4).map((tech) => (
                                             <span
                                                 key={tech}
-                                                className="px-3 py-1 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 rounded-md text-xs font-semibold"
+                                                className="px-4 py-1.5 bg-gray-100 dark:bg-slate-700/80 text-gray-600 dark:text-slate-300 rounded-full text-xs font-medium border border-gray-200 dark:border-slate-600"
                                             >
                                                 {tech}
                                             </span>
@@ -231,23 +231,10 @@ export const Projects = () => {
                         </button>
                     </div>
 
-                    {/* Mobile navigation buttons - centered below card */}
-                    <div className="flex md:hidden justify-center gap-4 mt-6">
-                        <button
-                            onClick={handlePrev}
-                            className="w-12 h-12 rounded-full border border-gray-200 dark:border-slate-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-800/50"
-                            aria-label="Previous project"
-                        >
-                            <ChevronLeft className="w-6 h-6 text-gray-900 dark:text-white" strokeWidth={2} />
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="w-12 h-12 rounded-full border border-gray-200 dark:border-slate-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-800/50"
-                            aria-label="Next project"
-                        >
-                            <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" strokeWidth={2} />
-                        </button>
-                    </div>
+                    {/* Visual swipe hint on mobile - card edge peeking */}
+                    <p className="md:hidden text-center text-xs text-gray-500 dark:text-slate-400 mt-4 animate-pulse">
+                        ← Swipe to explore →
+                    </p>
 
                     {/* Progress indicators - under the card */}
                     <div className="flex justify-center gap-2 mt-6 md:mt-8">
@@ -259,8 +246,8 @@ export const Projects = () => {
                                     goToIndex(idx, direction);
                                 }}
                                 className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex
-                                        ? "w-8 bg-gray-900 dark:bg-white"
-                                        : "w-2 bg-gray-300 dark:bg-slate-600 hover:bg-gray-400 dark:hover:bg-slate-500"
+                                    ? "w-8 bg-gray-900 dark:bg-white"
+                                    : "w-2 bg-gray-300 dark:bg-slate-600 hover:bg-gray-400 dark:hover:bg-slate-500"
                                     }`}
                                 aria-label={`Go to project ${idx + 1}`}
                             />

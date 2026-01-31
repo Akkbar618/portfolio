@@ -13,7 +13,7 @@ const navLinks = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
     { href: "#projects", label: "Projects" },
-    { href: "#contact", label: "Contacts" },
+    { href: "#contact", label: "Contact" },
 ];
 
 export const Hero = () => {
@@ -28,7 +28,7 @@ export const Hero = () => {
         <>
             {/* Glass Header */}
             <nav className="fixed w-full z-50 top-0 start-0 bg-white/70 dark:bg-slate-900/80 backdrop-blur-lg border-b border-black/5 dark:border-white/5">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
                     <div className="flex flex-wrap items-center justify-between mx-auto p-4">
                         <a href="#" className="flex items-center space-x-3">
                             <span className="self-center text-xl font-bold whitespace-nowrap uppercase tracking-wider text-gray-900 dark:text-white">
@@ -49,7 +49,7 @@ export const Hero = () => {
                                     <a href="#projects" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">Projects</a>
                                 </li>
                                 <li>
-                                    <a href="#contact" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">Contacts</a>
+                                    <a href="#contact" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">Contact</a>
                                 </li>
                             </ul>
 
@@ -116,18 +116,37 @@ export const Hero = () => {
                 className="hero-section relative overflow-hidden hero-gradient dark:bg-slate-950"
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#f8f9fa] dark:to-slate-950 pointer-events-none" />
-                <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 md:py-0">
+                <div className="hero-content max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 py-20 md:py-0">
                     <div className="hero-layout flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
                         <div className="flex-1 space-y-5 text-center md:text-left">
                             <h1 className="hero-title font-black tracking-tight leading-tight text-gray-900 dark:text-white">
-                                I'm <span className="underline decoration-4 decoration-gray-400 dark:decoration-slate-500 underline-offset-8">Akbar Azizov</span>
+                                I'm{" "}
+                                <span className="relative inline-block">
+                                    Akbar
+                                    {/* Hand-drawn stroke SVG */}
+                                    <svg
+                                        className="absolute -bottom-2 left-0 w-full h-3"
+                                        viewBox="0 0 200 12"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="none"
+                                    >
+                                        <path
+                                            d="M2 8.5C20 4 40 9 60 6C80 3 100 8 120 5.5C140 3 160 7.5 180 5C190 4 198 6 198 6"
+                                            stroke="currentColor"
+                                            strokeWidth="3"
+                                            strokeLinecap="round"
+                                            className="text-gray-400/70 dark:text-slate-500/70"
+                                        />
+                                    </svg>
+                                </span>
                                 <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-slate-400">
                                     Android Developer
                                 </span>
                             </h1>
-                            <p className="hero-tagline text-gray-600 dark:text-slate-300 max-w-lg mx-auto md:mx-0 font-medium">
-                                Building AI-Powered Mobile Apps
+                            <p className="hero-tagline text-gray-600 dark:text-slate-200 max-w-lg mx-auto md:mx-0 font-medium mb-2">
+                                Android Engineer focused on AI.
                             </p>
                             <p className="hero-description text-gray-500 dark:text-slate-400 max-w-lg mx-auto md:mx-0">
                                 Engineering reliable, privacy-aware AI integrations for mobile. Bridging the gap between LLMs and Android production code.
@@ -160,7 +179,8 @@ export const Hero = () => {
                                     src="/avatar.png"
                                     alt="Akbar Azizov"
                                     loading="eager"
-                                    className="w-full h-auto object-contain"
+                                    draggable="false"
+                                    className="w-full h-auto object-contain pointer-events-none select-none"
                                 />
                                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#f8f9fa] dark:from-slate-950 to-transparent pointer-events-none" />
                             </div>

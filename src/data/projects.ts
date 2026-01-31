@@ -24,7 +24,7 @@ export const projects: Project[] = [
     slug: "voicebrain",
     image: projectImg1,
     description:
-      "An AI-powered voice note app with offline-first architecture. Implements 'Bring Your Own Key' pattern and Strategy pattern for switching between OpenAI and Gemini providers.",
+      "Local-first AI notes manager with zero-latency transcription and privacy-aware data handling. Implements multi-provider strategy for OpenAI and Gemini.",
     technologies: ["Kotlin", "Compose", "OpenAI API", "Gemini", "Room", "Hilt"],
     features: [
       "Implemented robust 'Bring Your Own Key' architecture",
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     slug: "market-r",
     image: projectImg2,
     description:
-      "Commercial Android application for a major retailer. Focused on migrating legacy XML code to modern Jetpack Compose UI.",
+      "Modernized the core retail app via Jetpack Compose, reducing UI code by 40% and improving rendering performance.",
     technologies: ["Android SDK", "Jetpack Compose", "MVVM", "Retrofit"],
     features: [
       "Migrated 15+ legacy XML screens to Jetpack Compose",
