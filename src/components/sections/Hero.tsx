@@ -32,25 +32,26 @@ export const Hero = () => {
                     <div className="flex flex-wrap items-center justify-between mx-auto p-4">
                         <a href="#" className="flex items-center space-x-3">
                             <span className="self-center text-xl font-bold whitespace-nowrap uppercase tracking-wider text-gray-900 dark:text-white">
-                                &lt;Dev. Portfolio /&gt;
+                                &lt;Dev.Portfolio/&gt;
                             </span>
                         </a>
 
                         {/* Desktop Nav */}
                         <div className="hidden md:flex items-center gap-8">
                             <ul className="font-medium flex flex-row space-x-8">
-                                <li>
-                                    <a href="#home" className="block py-2 px-3 text-black dark:text-white font-semibold">Home</a>
-                                </li>
-                                <li>
-                                    <a href="#about" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">About</a>
-                                </li>
-                                <li>
-                                    <a href="#projects" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">Projects</a>
-                                </li>
-                                <li>
-                                    <a href="#contact" className="block py-2 px-3 text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors">Contact</a>
-                                </li>
+                                {navLinks.map((link, index) => (
+                                    <li key={link.href}>
+                                        <a
+                                            href={link.href}
+                                            className={`block py-2 px-3 transition-colors ${index === 0
+                                                ? "text-black dark:text-white font-semibold"
+                                                : "text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                                                }`}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
                             </ul>
 
                             {/* Theme Toggle */}
@@ -178,7 +179,10 @@ export const Hero = () => {
                                 <img
                                     src="/avatar.png"
                                     alt="Akbar Azizov"
-                                    loading="eager"
+                                    width={400}
+                                    height={520}
+                                    fetchPriority="high"
+                                    decoding="async"
                                     draggable="false"
                                     className="w-full h-auto object-contain pointer-events-none select-none"
                                 />

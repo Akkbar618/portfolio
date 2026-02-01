@@ -1,9 +1,10 @@
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { projects } from "@/data/projects";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const ProjectDetail = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { slug } = useParams<{ slug?: string }>();
   const project = projects.find((p) => p.slug === slug);
 
   const heroAnimation = useScrollAnimation();
@@ -14,13 +15,16 @@ const ProjectDetail = () => {
   if (!project) {
     return (
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <Helmet>
+          <title>Project Not Found | Akbar Azizov</title>
+        </Helmet>
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">Проект не найден</h1>
+          <h1 className="text-4xl font-bold">Project Not Found</h1>
           <Link
             to="/#projects"
             className="inline-block px-6 py-3 border border-foreground hover:bg-foreground hover:text-background transition-all"
           >
-            Вернуться к проектам
+            Back to Projects
           </Link>
         </div>
       </div>
@@ -29,31 +33,47 @@ const ProjectDetail = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Dynamic SEO Meta Tags */}
+      <Helmet>
+        <title>{project.title} | Akbar Azizov</title>
+        <meta name="description" content={project.description} />
+        <meta property="og:title" content={`${project.title} | Akbar Azizov`} />
+        <meta property="og:description" content={project.description} />
+        <meta property="og:image" content={project.image} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${project.title} | Akbar Azizov`} />
+        <meta name="twitter:description" content={project.description} />
+      </Helmet>
+
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-6 md:px-12 lg:px-24 border-b border-border">
         <Link to="/" className="text-lg font-semibold tracking-tight">
-          Имя Фамилия
+          Akbar Azizov
         </Link>
         <Link
           to="/#projects"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Назад к проектам
+          ← Back to Projects
         </Link>
       </header>
 
       {/* Hero */}
       <section
         ref={heroAnimation.ref}
-        className={`px-6 py-12 md:px-12 lg:px-24 md:py-16 transition-all duration-700 ${
-          heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className={`px-6 py-12 md:px-12 lg:px-24 md:py-16 transition-all duration-700 ${heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
       >
         <div className="max-w-5xl mx-auto">
           <div className="aspect-video bg-muted overflow-hidden border border-border mb-8">
             <img
               src={project.image}
               alt={project.title}
+              width={1280}
+              height={720}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover grayscale"
             />
           </div>
@@ -64,12 +84,11 @@ const ProjectDetail = () => {
       {/* Description */}
       <section
         ref={descAnimation.ref}
-        className={`px-6 py-12 md:px-12 lg:px-24 bg-card border-y border-border transition-all duration-700 delay-100 ${
-          descAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className={`px-6 py-12 md:px-12 lg:px-24 bg-card border-y border-border transition-all duration-700 delay-100 ${descAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
       >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">О проекте</h2>
+          <h2 className="text-2xl font-bold mb-6">About</h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
             {project.description}
           </p>
@@ -79,12 +98,11 @@ const ProjectDetail = () => {
       {/* Technologies */}
       <section
         ref={techAnimation.ref}
-        className={`px-6 py-12 md:px-12 lg:px-24 transition-all duration-700 delay-200 ${
-          techAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className={`px-6 py-12 md:px-12 lg:px-24 transition-all duration-700 delay-200 ${techAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
       >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Технологии</h2>
+          <h2 className="text-2xl font-bold mb-6">Technologies</h2>
           <div className="flex flex-wrap gap-3">
             {project.technologies.map((tech) => (
               <span
@@ -101,15 +119,14 @@ const ProjectDetail = () => {
       {/* Features */}
       <section
         ref={featuresAnimation.ref}
-        className={`px-6 py-12 md:px-12 lg:px-24 bg-card border-y border-border transition-all duration-700 delay-300 ${
-          featuresAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className={`px-6 py-12 md:px-12 lg:px-24 bg-card border-y border-border transition-all duration-700 delay-300 ${featuresAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
       >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Ключевые функции</h2>
+          <h2 className="text-2xl font-bold mb-6">Key Features</h2>
           <ul className="grid md:grid-cols-2 gap-4">
-            {project.features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-3">
+            {project.features.map((feature) => (
+              <li key={feature} className="flex items-start gap-3">
                 <span className="text-muted-foreground">✓</span>
                 <span>{feature}</span>
               </li>
@@ -121,7 +138,7 @@ const ProjectDetail = () => {
       {/* Links */}
       <section className="px-6 py-12 md:px-12 lg:px-24">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Ссылки</h2>
+          <h2 className="text-2xl font-bold mb-6">Links</h2>
           <div className="flex flex-col sm:flex-row gap-4">
             {project.links.github && (
               <a
@@ -154,7 +171,7 @@ const ProjectDetail = () => {
             to="/#projects"
             className="inline-block px-8 py-3 border border-foreground hover:bg-foreground hover:text-background transition-all"
           >
-            ← Все проекты
+            ← All Projects
           </Link>
         </div>
       </section>

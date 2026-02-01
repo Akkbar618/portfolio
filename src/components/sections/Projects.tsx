@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { ProjectCard } from "@/components/ProjectCard";
 import { ANIMATION_DELAYS } from "@/constants/animation.constants";
 import { projects } from "@/data/projects";
 import { ChevronLeft, ChevronRight, Bot, Smartphone, Shield, Gift } from "lucide-react";
@@ -20,7 +21,6 @@ export const Projects = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
     const containerRef = useRef<HTMLDivElement>(null);
-    const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     // Touch/drag state
     const touchStartX = useRef(0);
@@ -41,43 +41,59 @@ export const Projects = () => {
     }, [totalProjects]);
 
     const handleNext = useCallback(() => {
-        goToIndex(currentIndex + 1, 'left');
-    }, [currentIndex, goToIndex]);
+        setSlideDirection('left');
+        setCurrentIndex((prev) => (prev + 1) % totalProjects);
+    }, [totalProjects]);
 
     const handlePrev = useCallback(() => {
-        goToIndex(currentIndex - 1, 'right');
-    }, [currentIndex, goToIndex]);
+        setSlideDirection('right');
+        setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
+    }, [totalProjects]);
 
-    // Auto-scroll
+    // Auto-scroll - stable interval that restarts when tab becomes visible
     useEffect(() => {
-        if (isHovered) {
-            if (autoScrollRef.current) {
-                clearInterval(autoScrollRef.current);
-                autoScrollRef.current = null;
-            }
-            return;
-        }
+        if (isHovered || totalProjects === 0) return;
 
-        autoScrollRef.current = setInterval(() => {
-            handleNext();
-        }, AUTO_SCROLL_INTERVAL);
+        const tick = () => {
+            setSlideDirection('left');
+            setCurrentIndex((prev) => (prev + 1) % totalProjects);
+        };
 
-        return () => {
-            if (autoScrollRef.current) {
-                clearInterval(autoScrollRef.current);
+        let id = window.setInterval(tick, AUTO_SCROLL_INTERVAL);
+
+        const restart = () => {
+            clearInterval(id);
+            id = window.setInterval(tick, AUTO_SCROLL_INTERVAL);
+        };
+
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') {
+                restart();
+            } else {
+                clearInterval(id);
             }
         };
-    }, [handleNext, isHovered]);
+        document.addEventListener('visibilitychange', handleVisibility);
+
+        return () => {
+            clearInterval(id);
+            document.removeEventListener('visibilitychange', handleVisibility);
+        };
+    }, [isHovered, totalProjects]);
 
     // Touch handlers for swipe
     const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX;
+        const touch = e.touches[0];
+        if (!touch) return;
+        touchStartX.current = touch.clientX;
         isDragging.current = true;
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
         if (!isDragging.current) return;
-        touchEndX.current = e.touches[0].clientX;
+        const touch = e.touches[0];
+        if (!touch) return;
+        touchEndX.current = touch.clientX;
     };
 
     const handleTouchEnd = () => {
@@ -144,8 +160,10 @@ export const Projects = () => {
     }, [handleNext, handlePrev]);
 
     const project = projectList[currentIndex];
-    const style = projectStyles[currentIndex % projectStyles.length];
-    const IconComponent = style.icon;
+    if (!project) {
+        return null;
+    }
+    const style = projectStyles[currentIndex % projectStyles.length] ?? projectStyles[0]!;
 
     return (
         <AnimatedSection delay={ANIMATION_DELAYS.PROJECTS_SECTION}>
@@ -185,40 +203,12 @@ export const Projects = () => {
                             onMouseMove={handleMouseMove}
                             onMouseUp={handleMouseUp}
                         >
-                            <div
-                                key={currentIndex}
-                                className={`bg-white dark:bg-slate-800/50 rounded-[2rem] border-2 border-gray-100 dark:border-slate-700/50 overflow-hidden shadow-lg flex flex-col md:flex-row group ${style.hoverBorder} transition-colors duration-300 ${slideDirection === 'left' ? 'animate-slide-left' : 'animate-slide-right'}`}
-                            >
-                                {/* Gradient Placeholder with Icon */}
-                                <div className={`flex-1 ${style.gradient} relative flex items-center justify-center p-8 md:p-12 min-h-[240px] md:min-h-[360px] order-1`}>
-                                    <div className="relative w-36 md:w-48 aspect-[9/19] rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                                        <IconComponent className="w-14 md:w-18 h-14 md:h-18 text-white/40" strokeWidth={1} />
-                                    </div>
-                                </div>
-
-                                {/* Text Content - Simplified order: Title, Description, Tags */}
-                                <div className="flex-1 p-6 md:p-10 flex flex-col justify-center items-start order-2">
-                                    {/* 1. Title */}
-                                    <h3 className="text-2xl md:text-3xl font-bold mb-3 text-gray-900 dark:text-white">{project.title}</h3>
-
-                                    {/* 2. Description - Fixed height with line-clamp */}
-                                    <p className="text-gray-600 dark:text-slate-300 mb-5 leading-relaxed text-sm md:text-base line-clamp-3">
-                                        {project.description}
-                                    </p>
-
-                                    {/* 3. Tech tags - Unified rounded-full design */}
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.technologies.slice(0, 4).map((tech) => (
-                                            <span
-                                                key={tech}
-                                                className="px-4 py-1.5 bg-gray-100 dark:bg-slate-700/80 text-gray-600 dark:text-slate-300 rounded-full text-xs font-medium border border-gray-200 dark:border-slate-600"
-                                            >
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                            <ProjectCard
+                                key={project.id}
+                                project={project}
+                                style={style}
+                                slideDirection={slideDirection}
+                            />
                         </div>
 
                         {/* Right arrow - hidden on very small screens */}

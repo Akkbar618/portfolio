@@ -17,4 +17,20 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    sourcemap: false,
+    reportCompressedSize: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          ui: ["lucide-react", "@radix-ui/react-dialog", "@radix-ui/react-slot"],
+        },
+      },
+    },
+  },
+  esbuild: {
+    drop: ["console", "debugger"],
+  },
 });

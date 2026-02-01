@@ -18,7 +18,9 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
         if (entry.isIntersecting) {
           setIsVisible(true);
           if (triggerOnce) {

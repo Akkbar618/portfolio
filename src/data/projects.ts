@@ -1,8 +1,3 @@
-import projectImg1 from "@/assets/project-placeholder-1.png";
-import projectImg2 from "@/assets/project-placeholder-2.png";
-import projectImg3 from "@/assets/project-placeholder-3.png";
-import projectImg4 from "@/assets/project-placeholder-4.png";
-
 export interface Project {
   id: number;
   title: string;
@@ -22,7 +17,7 @@ export const projects: Project[] = [
     id: 1,
     title: "VoiceBrain",
     slug: "voicebrain",
-    image: projectImg1,
+    image: "/projects/project-placeholder-1.png",
     description:
       "Local-first AI notes manager with zero-latency transcription and privacy-aware data handling. Implements multi-provider strategy for OpenAI and Gemini.",
     technologies: ["Kotlin", "Compose", "OpenAI API", "Gemini", "Room", "Hilt"],
@@ -42,7 +37,7 @@ export const projects: Project[] = [
     id: 2,
     title: "Market-R",
     slug: "market-r",
-    image: projectImg2,
+    image: "/projects/project-placeholder-2.png",
     description:
       "Modernized the core retail app via Jetpack Compose, reducing UI code by 40% and improving rendering performance.",
     technologies: ["Android SDK", "Jetpack Compose", "MVVM", "Retrofit"],
@@ -62,7 +57,7 @@ export const projects: Project[] = [
     id: 3,
     title: "LLM Security Framework",
     slug: "llm-security",
-    image: projectImg3,
+    image: "/projects/project-placeholder-3.png",
     description:
       "Research project focusing on the reliability and safety of AI integrations in mobile environments.",
     technologies: ["Python", "LLMs", "Security", "Evaluation"],
@@ -82,7 +77,7 @@ export const projects: Project[] = [
     id: 4,
     title: "Loyalist",
     slug: "loyalist",
-    image: projectImg4,
+    image: "/projects/project-placeholder-4.png",
     description:
       "A cross-platform loyalty management system helping businesses retain customers through digital rewards.",
     technologies: ["Kotlin Multiplatform", "Compose", "Firebase"],
