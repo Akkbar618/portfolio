@@ -14,7 +14,39 @@ export default {
 			}
 		},
 		fontFamily: {
-			sans: ['Inter', 'sans-serif'],
+			sans: [
+				'Inter',
+				'ui-sans-serif',
+				'system-ui',
+				'-apple-system',
+				'BlinkMacSystemFont',
+				'Segoe UI',
+				'Roboto',
+				'Helvetica Neue',
+				'Arial',
+				'Noto Sans',
+				'sans-serif'
+			],
+			serif: [
+				'Crimson Pro',
+				'ui-serif',
+				'Georgia',
+				'Cambria',
+				'Times New Roman',
+				'Times',
+				'serif'
+			],
+			mono: [
+				'SF Mono',
+				'ui-monospace',
+				'SFMono-Regular',
+				'Menlo',
+				'Monaco',
+				'Consolas',
+				'Liberation Mono',
+				'Courier New',
+				'monospace'
+			]
 		},
 		extend: {
 			colors: {
@@ -97,44 +129,8 @@ export default {
 				lg: 'var(--shadow-lg)',
 				xl: 'var(--shadow-xl)',
 				'2xl': 'var(--shadow-2xl)'
-			},
-			fontFamily: {
-				sans: [
-					'DM Sans',
-					'ui-sans-serif',
-					'system-ui',
-					'-apple-system',
-					'BlinkMacSystemFont',
-					'Segoe UI',
-					'Roboto',
-					'Helvetica Neue',
-					'Arial',
-					'Noto Sans',
-					'sans-serif'
-				],
-				serif: [
-					'Crimson Pro',
-					'ui-serif',
-					'Georgia',
-					'Cambria',
-					'Times New Roman',
-					'Times',
-					'serif'
-				],
-				mono: [
-					'SF Mono',
-					'ui-monospace',
-					'SFMono-Regular',
-					'Menlo',
-					'Monaco',
-					'Consolas',
-					'Liberation Mono',
-					'Courier New',
-					'monospace'
-				]
 			}
 		}
 	},
 	plugins: [tailwindcssAnimate],
 } satisfies Config;
-

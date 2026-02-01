@@ -162,6 +162,20 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+
+  :where(button, a) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :where(button, a):focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  :where(button, a):focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 }
 
 @layer utilities {
@@ -195,6 +209,13 @@
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-400;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* Hero section mesh gradient */
@@ -307,4 +328,10 @@
   .invert-hover:hover {
     @apply bg-foreground text-background;
   }
+
+  :where(button, a):focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
 }

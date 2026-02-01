@@ -1,97 +1,162 @@
-export interface Project {
-  id: number;
+import { projectsSummary, type ProjectSlug, type ProjectSummary } from "./projectsSummary";
+
+export interface ProjectFeature {
   title: string;
-  slug: string;
-  image: string;
   description: string;
-  technologies: string[];
-  features: string[];
+}
+
+export interface ProjectScreen {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
+export interface Project extends ProjectSummary {
+  challenge: string;
+  features: ProjectFeature[];
+  screens: ProjectScreen[];
   links: {
     github?: string;
     playStore?: string;
   };
 }
 
-export const projects: Project[] = [
-  {
-    id: 1,
-    title: "VoiceBrain",
-    slug: "voicebrain",
-    image: "/projects/project-placeholder-1.png",
-    description:
-      "Local-first AI notes manager with zero-latency transcription and privacy-aware data handling. Implements multi-provider strategy for OpenAI and Gemini.",
-    technologies: ["Kotlin", "Compose", "OpenAI API", "Gemini", "Room", "Hilt"],
+type ProjectDetails = Pick<Project, "challenge" | "features" | "screens" | "links">;
+
+const projectDetails: Record<ProjectSlug, ProjectDetails> = {
+  voicebrain: {
+    challenge: "Coming Soon...",
     features: [
-      "Implemented robust 'Bring Your Own Key' architecture",
-      "Designed structured JSON outputs for reliable AI parsing",
-      "Built offline-first local storage with Room",
-      "Multi-provider AI strategy (OpenAI + Gemini)",
-      "Voice-to-text with intelligent processing",
-      "Privacy-focused: all API keys stored locally",
+      {
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+      },
+    ],
+    screens: [
+      {
+        id: "vb-1",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-1.png",
+      },
+      {
+        id: "vb-2",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-1.png",
+      },
+      {
+        id: "vb-3",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-1.png",
+      },
     ],
     links: {
       github: "https://github.com/Akkbar618",
     },
   },
-  {
-    id: 2,
-    title: "Market-R",
-    slug: "market-r",
-    image: "/projects/project-placeholder-2.png",
-    description:
-      "Modernized the core retail app via Jetpack Compose, reducing UI code by 40% and improving rendering performance.",
-    technologies: ["Android SDK", "Jetpack Compose", "MVVM", "Retrofit"],
+  "market-r": {
+    challenge: "Coming Soon...",
     features: [
-      "Migrated 15+ legacy XML screens to Jetpack Compose",
-      "Reduced module crash rate by implementing strict Unidirectional Data Flow",
-      "Optimized UI rendering performance by 25%",
-      "Implemented reusable component library",
-      "Enhanced user experience with Material 3 design",
-      "Integrated REST API for product catalog",
+      {
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+      },
+    ],
+    screens: [
+      {
+        id: "mr-1",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-2.png",
+      },
+      {
+        id: "mr-2",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-2.png",
+      },
+      {
+        id: "mr-3",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-2.png",
+      },
     ],
     links: {
       github: "https://github.com/Akkbar618",
     },
   },
-  {
-    id: 3,
-    title: "LLM Security Framework",
-    slug: "llm-security",
-    image: "/projects/project-placeholder-3.png",
-    description:
-      "Research project focusing on the reliability and safety of AI integrations in mobile environments.",
-    technologies: ["Python", "LLMs", "Security", "Evaluation"],
+  "llm-security": {
+    challenge: "Coming Soon...",
     features: [
-      "Created evaluation framework with 200+ jailbreak test prompts",
-      "Analyzed reliability of structured outputs across models",
-      "Benchmarked GPT-4, Claude, and Gemini for mobile use cases",
-      "Published findings on AI safety in production apps",
-      "Developed best practices for prompt engineering",
-      "Tested edge cases and failure modes",
+      {
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+      },
+    ],
+    screens: [
+      {
+        id: "llm-1",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-3.png",
+      },
+      {
+        id: "llm-2",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-3.png",
+      },
+      {
+        id: "llm-3",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-3.png",
+      },
     ],
     links: {
       github: "https://github.com/Akkbar618",
     },
   },
-  {
-    id: 4,
-    title: "Loyalist",
-    slug: "loyalist",
-    image: "/projects/project-placeholder-4.png",
-    description:
-      "A cross-platform loyalty management system helping businesses retain customers through digital rewards.",
-    technologies: ["Kotlin Multiplatform", "Compose", "Firebase"],
+  loyalist: {
+    challenge: "Coming Soon...",
     features: [
-      "Designed reusable UI component system used across 3 modules",
-      "Implemented real-time data sync with Firebase",
-      "Built QR code scanning for reward redemption",
-      "Created admin dashboard for business owners",
-      "Push notifications for special offers",
-      "Analytics dashboard for customer insights",
+      {
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+      },
+    ],
+    screens: [
+      {
+        id: "loy-1",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-4.png",
+      },
+      {
+        id: "loy-2",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-4.png",
+      },
+      {
+        id: "loy-3",
+        title: "Coming Soon...",
+        description: "Coming Soon...",
+        image: "/projects/project-placeholder-4.png",
+      },
     ],
     links: {
       github: "https://github.com/Akkbar618",
       playStore: "https://play.google.com",
     },
   },
-];
+};
+
+export const projects: Project[] = projectsSummary.map((summary) => ({
+  ...summary,
+  ...projectDetails[summary.slug],
+}));

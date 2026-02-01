@@ -26,7 +26,7 @@ export const About = () => {
                         </div>
 
                         {/* Stats - Unified styling */}
-                        <div className="grid grid-cols-3 gap-8 pt-12 border-t border-gray-200 dark:border-slate-800">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 pt-12 border-t border-transparent dark:border-transparent relative before:content-[''] before:absolute before:-top-6 before:left-0 before:w-full before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent dark:before:via-slate-700">
                             {stats.map((stat) => (
                                 <div key={stat.label} className="flex flex-col items-center justify-center">
                                     <div className="text-4xl md:text-5xl font-bold tracking-tighter text-gray-900 dark:text-white font-sans mb-2">

@@ -11,9 +11,41 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
 ) {
   const { threshold = 0.1, rootMargin = "0px", triggerOnce = true } = options;
   const ref = useRef<T>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    "matchMedia" in window &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [reduceMotion, setReduceMotion] = useState(prefersReducedMotion);
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
   useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = () => {
+      setReduceMotion(mediaQuery.matches);
+      if (mediaQuery.matches) {
+        setIsVisible(true);
+      }
+    };
+
+    handleChange();
+    if ("addEventListener" in mediaQuery) {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setIsVisible(true);
+      return;
+    }
+
     const element = ref.current;
     if (!element) return;
 
@@ -36,7 +68,7 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
     observer.observe(element);
 
     return () => observer.disconnect();
-  }, [threshold, rootMargin, triggerOnce]);
+  }, [reduceMotion, threshold, rootMargin, triggerOnce]);
 
-  return { ref, isVisible };
+  return { ref, isVisible, reduceMotion };
 }

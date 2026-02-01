@@ -1,33 +1,36 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ANIMATION_DELAYS } from "@/constants/animation.constants";
-import { projects } from "@/data/projects";
-import { ChevronLeft, ChevronRight, Bot, Smartphone, Shield, Gift } from "lucide-react";
+import { CAROUSEL_AUTO_SCROLL_INTERVAL_MS } from "@/constants/ui.constants";
+import { projectsSummary } from "@/data/projectsSummary";
+import { projectStylesList } from "@/constants/projectStyles";
+import { useSwipe } from "@/hooks/useSwipe";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const projectStyles = [
-    { gradient: "bg-gradient-to-br from-violet-500 to-fuchsia-500", icon: Bot, accent: "text-violet-600 dark:text-violet-400", hoverBorder: "hover:border-violet-500 dark:hover:border-violet-400" },
-    { gradient: "bg-gradient-to-br from-blue-500 to-cyan-400", icon: Smartphone, accent: "text-blue-600 dark:text-blue-400", hoverBorder: "hover:border-blue-500 dark:hover:border-blue-400" },
-    { gradient: "bg-gradient-to-br from-amber-500 to-orange-500", icon: Shield, accent: "text-amber-600 dark:text-amber-400", hoverBorder: "hover:border-amber-500 dark:hover:border-amber-400" },
-    { gradient: "bg-gradient-to-br from-emerald-500 to-teal-400", icon: Gift, accent: "text-emerald-600 dark:text-emerald-400", hoverBorder: "hover:border-emerald-500 dark:hover:border-emerald-400" },
-];
-
-const AUTO_SCROLL_INTERVAL = 4000;
-const SWIPE_THRESHOLD = 50; // Minimum pixels to trigger swipe
-const projectList = projects.slice(0, 4);
+const projectList = projectsSummary;
 
 export const Projects = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);
     const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    // Touch/drag state
-    const touchStartX = useRef(0);
-    const touchEndX = useRef(0);
-    const isDragging = useRef(false);
-
     const totalProjects = projectList.length;
+    const intervalRef = useRef<number | null>(null);
+
+    const startAutoScroll = useCallback(() => {
+        if (totalProjects === 0) return;
+        if (intervalRef.current) {
+            window.clearInterval(intervalRef.current);
+        }
+        intervalRef.current = window.setInterval(() => {
+            setSlideDirection('left');
+            setCurrentIndex((prev) => (prev + 1) % totalProjects);
+        }, CAROUSEL_AUTO_SCROLL_INTERVAL_MS);
+    }, [totalProjects]);
+
+    const resetAutoScroll = useCallback(() => {
+        startAutoScroll();
+    }, [startAutoScroll]);
 
     const goToIndex = useCallback((newIndex: number, direction: 'left' | 'right') => {
         setSlideDirection(direction);
@@ -38,114 +41,73 @@ export const Projects = () => {
         } else {
             setCurrentIndex(newIndex);
         }
-    }, [totalProjects]);
+        resetAutoScroll();
+    }, [resetAutoScroll, totalProjects]);
 
     const handleNext = useCallback(() => {
         setSlideDirection('left');
         setCurrentIndex((prev) => (prev + 1) % totalProjects);
-    }, [totalProjects]);
+        resetAutoScroll();
+    }, [resetAutoScroll, totalProjects]);
 
     const handlePrev = useCallback(() => {
         setSlideDirection('right');
         setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
-    }, [totalProjects]);
+        resetAutoScroll();
+    }, [resetAutoScroll, totalProjects]);
 
     // Auto-scroll - stable interval that restarts when tab becomes visible
     useEffect(() => {
-        if (isHovered || totalProjects === 0) return;
+        if (totalProjects === 0) return;
 
-        const tick = () => {
-            setSlideDirection('left');
-            setCurrentIndex((prev) => (prev + 1) % totalProjects);
-        };
-
-        let id = window.setInterval(tick, AUTO_SCROLL_INTERVAL);
-
-        const restart = () => {
-            clearInterval(id);
-            id = window.setInterval(tick, AUTO_SCROLL_INTERVAL);
-        };
+        startAutoScroll();
 
         const handleVisibility = () => {
             if (document.visibilityState === 'visible') {
-                restart();
-            } else {
-                clearInterval(id);
+                startAutoScroll();
+            } else if (intervalRef.current) {
+                window.clearInterval(intervalRef.current);
+                intervalRef.current = null;
             }
         };
         document.addEventListener('visibilitychange', handleVisibility);
 
         return () => {
-            clearInterval(id);
+            if (intervalRef.current) {
+                window.clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
             document.removeEventListener('visibilitychange', handleVisibility);
         };
-    }, [isHovered, totalProjects]);
+    }, [startAutoScroll, totalProjects]);
 
-    // Touch handlers for swipe
-    const handleTouchStart = (e: React.TouchEvent) => {
-        const touch = e.touches[0];
-        if (!touch) return;
-        touchStartX.current = touch.clientX;
-        isDragging.current = true;
-    };
+    // (intentionally no dropdown-driven carousel selection)
 
-    const handleTouchMove = (e: React.TouchEvent) => {
-        if (!isDragging.current) return;
-        const touch = e.touches[0];
-        if (!touch) return;
-        touchEndX.current = touch.clientX;
-    };
+    // Navigate to project detail
+    const navigate = useNavigate();
 
-    const handleTouchEnd = () => {
-        if (!isDragging.current) return;
-        isDragging.current = false;
+    const handleCardTap = useCallback(() => {
+        const targetProject = projectList[currentIndex];
+        if (targetProject) {
+            navigate(`/projects/${targetProject.slug}`);
+        }
+    }, [currentIndex, navigate]);
 
-        const diff = touchStartX.current - touchEndX.current;
-        if (Math.abs(diff) > SWIPE_THRESHOLD) {
-            if (diff > 0) {
-                handleNext(); // Swipe left = next
-            } else {
-                handlePrev(); // Swipe right = prev
+    const swipeHandlers = useSwipe({
+        onSwipeLeft: handleNext,
+        onSwipeRight: handlePrev,
+        onTap: handleCardTap,
+    });
+
+    const handleCardKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const targetProject = projectList[currentIndex];
+            if (targetProject) {
+                navigate(`/projects/${targetProject.slug}`);
             }
         }
-        touchStartX.current = 0;
-        touchEndX.current = 0;
-    };
-
-    // Mouse drag handlers
-    const handleMouseDown = (e: React.MouseEvent) => {
-        touchStartX.current = e.clientX;
-        isDragging.current = true;
-        e.preventDefault();
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging.current) return;
-        touchEndX.current = e.clientX;
-    };
-
-    const handleMouseUp = () => {
-        if (!isDragging.current) return;
-        isDragging.current = false;
-
-        const diff = touchStartX.current - touchEndX.current;
-        if (Math.abs(diff) > SWIPE_THRESHOLD) {
-            if (diff > 0) {
-                handleNext();
-            } else {
-                handlePrev();
-            }
-        }
-        touchStartX.current = 0;
-        touchEndX.current = 0;
-    };
-
-    const handleMouseLeave = () => {
-        if (isDragging.current) {
-            handleMouseUp();
-        }
-        setIsHovered(false);
-    };
+    }, [currentIndex, navigate]);
 
     // Wheel scroll
     const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -163,7 +125,7 @@ export const Projects = () => {
     if (!project) {
         return null;
     }
-    const style = projectStyles[currentIndex % projectStyles.length] ?? projectStyles[0]!;
+    const style = projectStylesList[currentIndex % projectStylesList.length] ?? projectStylesList[0]!;
 
     return (
         <AnimatedSection delay={ANIMATION_DELAYS.PROJECTS_SECTION}>
@@ -176,10 +138,7 @@ export const Projects = () => {
 
                 {/* Carousel with side arrows */}
                 <div
-                    ref={containerRef}
                     className="relative px-6 sm:px-8 lg:px-12"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={handleMouseLeave}
                     onWheel={handleWheel}
                 >
                     {/* Container with arrows on sides */}
@@ -195,13 +154,12 @@ export const Projects = () => {
 
                         {/* Project Card */}
                         <div
-                            className="flex-1 cursor-grab active:cursor-grabbing select-none"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            onMouseDown={handleMouseDown}
-                            onMouseMove={handleMouseMove}
-                            onMouseUp={handleMouseUp}
+                            className="flex-1 cursor-pointer active:cursor-grabbing select-none"
+                            {...swipeHandlers}
+                            onKeyDown={handleCardKeyDown}
+                            role="link"
+                            tabIndex={0}
+                            aria-label={`Open project ${project.title}`}
                         >
                             <ProjectCard
                                 key={project.id}
@@ -222,7 +180,7 @@ export const Projects = () => {
                     </div>
 
                     {/* Visual swipe hint on mobile - card edge peeking */}
-                    <p className="md:hidden text-center text-xs text-gray-500 dark:text-slate-400 mt-4 animate-pulse">
+                    <p className="md:hidden text-center text-xs text-gray-500 dark:text-slate-400 mt-4 animate-pulse motion-reduce:animate-none">
                         ← Swipe to explore →
                     </p>
 
