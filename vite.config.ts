@@ -28,13 +28,7 @@ export default defineConfig(({ mode }) => {
       reportCompressedSize: true,
       rollupOptions: {
         output: {
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-            if (id.includes("react-router-dom")) return "router";
-            if (id.includes("react")) return "react";
-            if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui";
-            return "vendor";
-          },
+
         },
       },
     },
