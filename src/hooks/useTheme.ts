@@ -4,7 +4,7 @@ type ThemeMode = "light" | "dark" | "system";
 type ResolvedTheme = "light" | "dark";
 
 const getSystemTheme = (): ResolvedTheme => {
-    if (typeof window === "undefined") return "light";
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return "light";
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 };
 
@@ -13,7 +13,7 @@ export function useTheme() {
     const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => getSystemTheme());
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
+        if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
         const apply = () => {

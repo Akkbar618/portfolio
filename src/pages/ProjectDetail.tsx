@@ -297,7 +297,7 @@ const ProjectDetailsSection = ({
                   role="region"
                   aria-labelledby={buttonId}
                   aria-hidden={!isOpen}
-                  className={`grid transition-[grid-template-rows,opacity] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  className={`grid transition-[grid-template-rows,opacity] duration-400 ease-out-expo ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                     }`}
                 >
                   <div className={`overflow-hidden transition-all duration-300 ease-out ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"}`}>

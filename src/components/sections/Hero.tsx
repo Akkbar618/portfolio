@@ -81,7 +81,7 @@ const HeroPortrait = () => {
                         alt="Akbar Azizov"
                         width={586}
                         height={934}
-                        fetchPriority="high"
+                        fetchpriority="high"
                         loading="eager"
                         decoding="async"
                         draggable="false"

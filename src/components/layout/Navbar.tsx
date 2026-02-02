@@ -50,6 +50,9 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
         }
     };
 
+    const openProjectsMenu = () => setIsProjectsMenuOpen(true);
+    const closeProjectsMenu = () => setIsProjectsMenuOpen(false);
+
     const handleNavItemClick = (sectionId: string) => {
         setActiveSection(sectionId);
         setMobileMenuOpen(false);
@@ -67,9 +70,6 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
-
-    const openProjectsMenu = () => setIsProjectsMenuOpen(true);
-    const closeProjectsMenu = () => setIsProjectsMenuOpen(false);
 
     const handleProjectsBlur = (event: React.FocusEvent<HTMLLIElement>) => {
         const nextFocus = event.relatedTarget as Node | null;

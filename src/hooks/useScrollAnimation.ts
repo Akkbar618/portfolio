@@ -13,13 +13,13 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
   const ref = useRef<T>(null);
   const prefersReducedMotion =
     typeof window !== "undefined" &&
-    "matchMedia" in window &&
+    typeof window.matchMedia === "function" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const [reduceMotion, setReduceMotion] = useState(prefersReducedMotion);
   const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
 
@@ -48,6 +48,10 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
 
     const element = ref.current;
     if (!element) return;
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {

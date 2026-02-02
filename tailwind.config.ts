@@ -129,6 +129,12 @@ export default {
 				lg: 'var(--shadow-lg)',
 				xl: 'var(--shadow-xl)',
 				'2xl': 'var(--shadow-2xl)'
+			},
+			transitionDuration: {
+				400: '400ms'
+			},
+			transitionTimingFunction: {
+				'out-expo': 'cubic-bezier(0.16,1,0.3,1)'
 			}
 		}
 	},

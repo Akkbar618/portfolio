@@ -64,8 +64,15 @@ The app will be available at `http://localhost:8080`.
 | `npm run dev` | Start development server |
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build |
-| `npm run test` | Run tests (Vitest) |
+| `npm run test` | Run unit tests (Vitest) |
+| `npm run test:e2e` | Run end-to-end tests (Playwright) |
 | `npm run lint` | Run ESLint |
+
+## Testing
+
+The project uses a dual testing strategy:
+- **Unit/Integration**: Vitest + React Testing Library for component logic.
+- **E2E**: Playwright for full browser automation and critical flow verification.
 
 ## Project Structure
 
