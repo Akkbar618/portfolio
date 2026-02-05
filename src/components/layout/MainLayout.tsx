@@ -18,7 +18,7 @@ export const MainLayout = ({
     return (
         <div className={cn("min-h-screen", className)}>
             <Navbar variant={variant} />
-            {children}
+            <main>{children}</main>
             <Footer />
             <BackToTop />
         </div>
