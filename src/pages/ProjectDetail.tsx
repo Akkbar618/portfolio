@@ -337,10 +337,18 @@ const ProjectDetail = () => {
   const screens = projectData?.screens || [];
   const totalScreens = screens.length;
   const style = projectData ? (projectStylesBySlug[projectData.slug] ?? fallbackProjectStyle) : fallbackProjectStyle;
-  const pageTitle = projectData ? `${projectData.title} | Akbar Azizov` : "Project Not Found | Akbar Azizov";
-  const pageDescription = projectData ? projectData.description : "Requested project was not found.";
+  const defaultTitle = "Akbar — Android & AI Engineer";
+  const defaultDescription =
+    "Building intelligent mobile apps with Kotlin & Gemini. Offline-first architecture, 99.9% crash-free stability.";
+  const hasPlaceholderContent = projectData
+    ? /coming soon/i.test(projectData.title) || /coming soon/i.test(projectData.description)
+    : false;
+  const pageTitle = projectData && !hasPlaceholderContent ? `${projectData.title} | Akbar Azizov` : defaultTitle;
+  const pageDescription = projectData && !hasPlaceholderContent ? projectData.description : defaultDescription;
   const pageUrl = typeof window !== "undefined" ? window.location.href : "";
-  const pageImage = toAbsoluteUrl(projectData?.image ?? "/og-image.png");
+  const pageImage = toAbsoluteUrl(
+    projectData && !hasPlaceholderContent && projectData.image ? projectData.image : "/og-image.png"
+  );
 
   const handleNext = useCallback(() => {
     if (totalScreens <= 1) return;
