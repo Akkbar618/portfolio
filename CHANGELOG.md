@@ -1,58 +1,59 @@
-# Changelog
+# История изменений
 
-This file is based on the commit history of `main`. There are no Git tags or GitHub releases, so "versions" and "subversions" below correspond to sequential commits on `main`, ordered by date.
+Этот файл основан на истории коммитов ветки `main`. Тегов Git и релизов GitHub нет, поэтому «версии» и «подверсии» ниже соответствуют последовательным коммитам `main`, упорядоченным по дате.
 
-## Version 1 — 2026-01-30 (commit `d92841a`)
-- Initial project scaffold and configuration (Vite + React + TypeScript, Tailwind, ESLint, Vitest).
-- Routing and pages: `Index`, `ProjectDetail`, `NotFound`.
-- Core UI helpers and hooks: animated sections, nav links, toasts/tooltips, scroll animation.
-- Base data and assets: project data, placeholders, resume PDF, avatar, global styles.
+## Версия 1 — 2026-01-30 (коммит `d92841a`)
+- Начальный каркас и конфигурация проекта (Vite + React + TypeScript, Tailwind, ESLint, Vitest).
+- Роутинг и страницы: `Index`, `ProjectDetail`, `NotFound`.
+- Базовые UI-хелперы и хуки: анимированные секции, навигационные ссылки, toasts/tooltips, анимация скролла.
+- Данные и ассеты: данные проектов, плейсхолдеры, резюме PDF, аватар, глобальные стили.
 
-## Version 2 — 2026-01-31 (commit `b215e7e`)
-- Refactored architecture into section components (`Hero`, `About`, `Projects`, `TechStack`, `Footer`).
-- Added theme support via `useTheme` and dark mode styling.
-- SEO/branding updates in `index.html` and added `public/og-image.png`.
+## Версия 2 — 2026-01-31 (коммит `b215e7e`)
+- Рефакторинг архитектуры на секционные компоненты (`Hero`, `About`, `Projects`, `TechStack`, `Footer`).
+- Добавлена поддержка темы через `useTheme` и стили тёмного режима.
+- Обновления SEO/брендинга в `index.html` и добавлен `public/og-image.png`.
 
-## Version 3 — 2026-01-31 (commit `7d826ec`)
-- Responsive fixes using `dvh` units and sticky behavior in `TechStack`.
-- Projects carousel redesign with infinite loop and swipe support.
-- Added directional animations (slide/scale/blur) and mobile spacing improvements.
-- Added `CHANGES_CODEX.md` (later removed).
+## Версия 3 — 2026-01-31 (коммит `7d826ec`)
+- Адаптивные исправления с `dvh` единицами и липким поведением `TechStack`.
+- Редизайн карусели проектов: бесконечная лента и поддержка свайпа.
+- Направленные анимации (slide/scale/blur) и улучшения мобильных отступов.
+- Добавлен `CHANGES_CODEX.md` (позже удалён).
 
-## Version 4 — 2026-01-31 (commit `75b70de`)
-- Content polish for About/Hero with more senior/engineering tone.
-- Mobile UX improvements: swipe hints, horizontal scroll for tech stack, footer layout tweaks.
-- Visual polish: unified stats style, glass-style icons, hand-drawn stroke.
-- Updated project descriptions; fixed drag and spacing issues.
+## Версия 4 — 2026-01-31 (коммит `75b70de`)
+- Полировка контента About/Hero в более «senior/engineering» тоне.
+- Улучшения мобильного UX: подсказки свайпа, горизонтальный скролл стека, правки футера.
+- Визуальная полировка: единый стиль статистики, стеклянные иконки, hand-drawn stroke.
+- Обновлены описания проектов; исправлены проблемы с drag и отступами.
 
-## Version 5 — 2026-02-01 (commit `091bc43`)
-- Bundle size reduction and cleanup (removed unused assets and files).
-- Dynamic SEO via `react-helmet-async` and page metadata updates.
-- New components: `BackToTop`, `ProjectCard`, `PageLoader`.
-- Removed old toast system and test scaffolding; refined styles and project detail page.
-- Enabled stricter TypeScript settings and simplified configs.
+## Версия 5 — 2026-02-01 (коммит `091bc43`)
+- Снижение размера бандла и чистка (удалены неиспользуемые ассеты и файлы).
+- Динамический SEO через `react-helmet-async` и обновление метаданных страниц.
+- Новые компоненты: `BackToTop`, `ProjectCard`, `PageLoader`.
+- Удалена старая toast-система и тестовый каркас; доработаны стили и страница деталей проекта.
+- Включены более строгие настройки TypeScript и упрощены конфиги.
 
-## Version 6 — 2026-02-02 (commit `b2907fa`)
-- Performance: optimized image loading, scroll-spy via IntersectionObserver, throttled high-frequency events, manualChunks tuning.
-- Code quality: strict TS, global `ErrorBoundary`, better broken-image handling.
-- Architecture: introduced layout components (`MainLayout`, `Navbar`, `Footer`), deduplicated project data, added `useSwipe`.
-- UX/Accessibility: system theme sync, deep-linking/scroll restoration, improved ARIA/keyboard support.
-- Housekeeping: removed dead code; README update with detailed features.
+## Версия 6 — 2026-02-02 (коммит `b2907fa`)
+- Производительность: оптимизация загрузки изображений, scroll-spy через IntersectionObserver, throttling высокочастотных событий, настройка `manualChunks`.
+- Качество кода: строгий TS, глобальный `ErrorBoundary`, улучшенная обработка битых изображений.
+- Архитектура: введены layout-компоненты (`MainLayout`, `Navbar`, `Footer`), дедупликация данных проектов, добавлен `useSwipe`.
+- UX/Accessibility: синхронизация с системной темой, deep-linking/восстановление позиции скролла, улучшены ARIA/клавиатурная навигация.
+- Хаускипинг: удалён мёртвый код; обновлён README с подробным списком фич.
 
-## Version 6.1 — 2026-02-02 (commit `6b4f8e6`)
-- Removed `manualChunks` in `vite.config.ts` to fix a circular dependency error.
+## Версия 6.1 — 2026-02-02 (коммит `6b4f8e6`)
+- Удалён `manualChunks` в `vite.config.ts` для устранения ошибки циклической зависимости.
 
-## Version 6.2 — 2026-02-02 (commit `6fbcb9a`)
-- Build config updates: improved `manualChunks`, conditional sourcemaps, React Router v7 future flags.
-- E2E testing: added Playwright config, `test:e2e` script, CI workflow, smoke tests.
-- Documentation updates in README.
+## Версия 6.2 — 2026-02-02 (коммит `6fbcb9a`)
+- Обновления build-конфига: улучшен `manualChunks`, условные sourcemaps, future flags React Router v7.
+- E2E тестирование: добавлен Playwright, скрипт `test:e2e`, CI workflow, smoke-тесты.
+- Обновлён README.
 
-## Version 6.3 — 2026-02-05 (commit `5c9583f`)
-- Added synced blinking underscore animation for favicon/logo (`useBlink`, `useDynamicFavicon`).
-- Updated footer text and related UI tweaks.
-- Refreshed preview and avatar assets.
+## Версия 6.3 — 2026-02-05 (коммит `5c9583f`)
+- Добавлена синхронная анимация мигающего подчёркивания для favicon/логотипа (`useBlink`, `useDynamicFavicon`).
+- Обновлён текст футера и связанные правки UI.
+- Обновлены preview и аватар-ассеты.
 
-## Version 6.4 — 2026-02-05 (commit `993b4c0`)
-- Added Inter font asset and wired it into styles and `index.html`.
-- Restored `src/test/setup.ts` and updated `vitest.config.ts`.
-- Minor layout/style refinements.
+## Версия 6.4 — 2026-02-05 (коммит `993b4c0`)
+- Добавлен шрифт Inter и подключение в стилях и `index.html`.
+- Восстановлен `src/test/setup.ts` и обновлён `vitest.config.ts`.
+- Небольшие правки layout/стилей.
+
