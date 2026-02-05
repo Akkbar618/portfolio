@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useBlink } from "@/hooks/useBlink";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
@@ -24,6 +25,7 @@ type NavbarProps = {
 };
 
 export const Navbar = ({ variant = "home" }: NavbarProps) => {
+    const isUnderscoreVisible = useBlink();
     const isHome = variant === "home";
     const location = useLocation();
     const navigate = useNavigate();
@@ -34,6 +36,10 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
     const projectMenu = projectsSummary;
     const projectsMenuRef = useRef<HTMLDivElement | null>(null);
     const projectsTriggerRef = useRef<HTMLButtonElement | null>(null);
+    const blurButtonAfterTap = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+        const target = event.currentTarget;
+        window.setTimeout(() => target.blur(), 0);
+    };
 
     const handleNavClick = () => {
         setMobileMenuOpen(false);
@@ -241,7 +247,7 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                         className="flex items-center space-x-3"
                     >
                         <span className="self-center text-xl font-bold whitespace-nowrap uppercase tracking-wider text-gray-900 dark:text-white">
-                            &lt;Dev.Portfolio/&gt;
+                            &lt;Aka<span style={{ opacity: isUnderscoreVisible ? 1 : 0, transition: 'opacity 0.1s' }}>_</span>/Portfolio/&gt;
                         </span>
                     </Link>
 
@@ -326,7 +332,11 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
-                            className="p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-slate-700"
+                            onPointerUp={blurButtonAfterTap}
+                            onPointerCancel={blurButtonAfterTap}
+                            onTouchEnd={blurButtonAfterTap}
+                            onTouchCancel={blurButtonAfterTap}
+                            className="touch-no-ring p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-slate-700"
                             aria-label="Toggle theme"
                         >
                             {theme === "light" ? (
@@ -341,7 +351,11 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                     <div className="flex items-center gap-2 md:hidden">
                         <button
                             onClick={toggleTheme}
-                            className="p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 active:scale-95"
+                            onPointerUp={blurButtonAfterTap}
+                            onPointerCancel={blurButtonAfterTap}
+                            onTouchEnd={blurButtonAfterTap}
+                            onTouchCancel={blurButtonAfterTap}
+                            className="touch-no-ring p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 active:scale-95"
                             aria-label="Toggle theme"
                         >
                             {theme === "light" ? (

@@ -9,12 +9,13 @@ export default defineConfig(({ mode }) => {
   const devHost = env.VITE_DEV_HOST || "127.0.0.1";
   const isProd = mode === "production";
   const sourcemap = !isProd || env.VITE_SOURCEMAP === "true";
+  const devPort = Number(env.VITE_DEV_PORT) || 8080;
 
   return {
     base,
     server: {
       host: devHost,
-      port: 8080,
+      port: devPort,
       hmr: {
         overlay: false,
       },

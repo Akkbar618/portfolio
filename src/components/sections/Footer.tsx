@@ -15,7 +15,7 @@ export const Footer = () => {
             <footer id="contact" className="py-16 bg-[#f8f9fa] dark:bg-slate-950">
                 <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl font-semibold text-gray-900 dark:text-white mb-12">
-                        Ready to build something intelligent?
+                        Have an idea? Drop me a line
                     </h2>
 
                     {/* Mobile: Icon-only row | Desktop: Full buttons grid */}
@@ -35,6 +35,10 @@ export const Footer = () => {
                             </a>
                         ))}
                     </div>
+
+                    <p className="mt-12 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        Crafted with attention to detail
+                    </p>
                 </div>
             </footer>
         </AnimatedSection>
