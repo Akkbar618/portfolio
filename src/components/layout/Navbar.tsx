@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useBlink } from "@/hooks/useBlink";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, Sun, Moon, ChevronDown } from "lucide-react";
+import { Menu, Sun, Moon, SunMoon, ChevronDown } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { projectsSummary } from "@/data/projectsSummary";
 import { SCROLL_SPY_OFFSET_PX } from "@/constants/ui.constants";
@@ -24,6 +24,111 @@ type NavbarProps = {
     variant?: "home" | "detail";
 };
 
+const ThemeMenu = () => {
+    const { theme, mode, setTheme } = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
+    const menuId = useId();
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+    const closeMenu = () => setIsOpen(false);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            if (menuRef.current?.contains(target) || triggerRef.current?.contains(target)) {
+                return;
+            }
+            closeMenu();
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key !== "Escape") return;
+            closeMenu();
+            triggerRef.current?.focus();
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isOpen]);
+
+    const applyTheme = (nextMode: "light" | "dark" | "system") => {
+        setTheme(nextMode);
+        closeMenu();
+    };
+
+    const triggerIcon =
+        mode === "system" ? (
+            <SunMoon className="w-5 h-5" />
+        ) : theme === "light" ? (
+            <Sun className="w-5 h-5" />
+        ) : (
+            <Moon className="w-5 h-5" />
+        );
+
+    const itemClass = (value: "light" | "dark" | "system") =>
+        `block w-full text-left px-4 py-2.5 text-sm transition-colors first:pt-3 last:pb-3 ${
+            mode === value
+                ? "text-black dark:text-white font-semibold"
+                : "text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-slate-800/70"
+        }`;
+
+    return (
+        <div className="relative group after:content-[''] after:absolute after:left-0 after:right-0 after:top-full after:h-6">
+            <button
+                ref={triggerRef}
+                onClick={() => setIsOpen((prev) => !prev)}
+                aria-label="Select theme"
+                aria-haspopup="menu"
+                aria-expanded={isOpen}
+                aria-controls={menuId}
+                className="touch-no-ring p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-slate-700"
+            >
+                {triggerIcon}
+            </button>
+
+            <div
+                id={menuId}
+                ref={menuRef}
+                role="menu"
+                className={`absolute left-1/2 top-full z-50 mt-5 w-36 -translate-x-1/2 rounded-2xl border border-gray-200/80 dark:border-gray-800/80 bg-white/80 dark:bg-black/80 backdrop-blur-3xl shadow-2xl shadow-black/10 dark:shadow-black/40 transition-all duration-200 ease-out overflow-hidden before:content-[''] before:absolute before:-top-6 before:left-0 before:h-6 before:w-full before:bg-white/80 dark:before:bg-black/80 before:backdrop-blur-2xl ${
+                    isOpen
+                        ? "opacity-100 pointer-events-auto translate-y-0 scale-100"
+                        : "opacity-0 pointer-events-none translate-y-2 scale-[0.98]"
+                }`}
+            >
+                <div className="py-0">
+                    <button type="button" role="menuitem" className={itemClass("light")} onClick={() => applyTheme("light")}>
+                        <span className="inline-flex items-center gap-2">
+                            <Sun className="w-4 h-4" />
+                            Light
+                        </span>
+                    </button>
+                    <button type="button" role="menuitem" className={itemClass("dark")} onClick={() => applyTheme("dark")}>
+                        <span className="inline-flex items-center gap-2">
+                            <Moon className="w-4 h-4" />
+                            Dark
+                        </span>
+                    </button>
+                    <button type="button" role="menuitem" className={itemClass("system")} onClick={() => applyTheme("system")}>
+                        <span className="inline-flex items-center gap-2">
+                            <SunMoon className="w-4 h-4" />
+                            System
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const Navbar = ({ variant = "home" }: NavbarProps) => {
     const isUnderscoreVisible = useBlink();
     const isHome = variant === "home";
@@ -32,14 +137,9 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState(isHome ? "home" : "projects");
     const [isProjectsMenuOpen, setIsProjectsMenuOpen] = useState(false);
-    const { theme, toggleTheme } = useTheme();
     const projectMenu = projectsSummary;
     const projectsMenuRef = useRef<HTMLDivElement | null>(null);
     const projectsTriggerRef = useRef<HTMLButtonElement | null>(null);
-    const blurButtonAfterTap = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-        const target = event.currentTarget;
-        window.setTimeout(() => target.blur(), 0);
-    };
 
     const handleNavClick = () => {
         setMobileMenuOpen(false);
@@ -330,40 +430,12 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                         </ul>
 
                         {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            onPointerUp={blurButtonAfterTap}
-                            onPointerCancel={blurButtonAfterTap}
-                            onTouchEnd={blurButtonAfterTap}
-                            onTouchCancel={blurButtonAfterTap}
-                            className="touch-no-ring p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-slate-700"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === "light" ? (
-                                <Moon className="w-5 h-5" />
-                            ) : (
-                                <Sun className="w-5 h-5" />
-                            )}
-                        </button>
+                        <ThemeMenu />
                     </div>
 
                     {/* Mobile Menu */}
                     <div className="flex items-center gap-2 md:hidden">
-                        <button
-                            onClick={toggleTheme}
-                            onPointerUp={blurButtonAfterTap}
-                            onPointerCancel={blurButtonAfterTap}
-                            onTouchEnd={blurButtonAfterTap}
-                            onTouchCancel={blurButtonAfterTap}
-                            className="touch-no-ring p-2.5 rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all duration-300 active:scale-95"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === "light" ? (
-                                <Moon className="w-5 h-5" />
-                            ) : (
-                                <Sun className="w-5 h-5" />
-                            )}
-                        </button>
+                        <ThemeMenu />
 
                         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                             <SheetTrigger asChild>

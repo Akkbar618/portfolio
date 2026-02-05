@@ -9,40 +9,49 @@
   <script>
     (function () {
       try {
+        var stored = window.localStorage && window.localStorage.getItem("theme-mode");
+        if (stored === "light" || stored === "dark") {
+          document.documentElement.classList.toggle("dark", stored === "dark");
+          return;
+        }
         var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (prefersDark) document.documentElement.classList.add("dark");
-      } catch (e) {}
+      } catch (e) { }
     })();
   </script>
-  
+
   <!-- Preload self-hosted Inter font -->
   <link rel="preload" href="/fonts/Inter-latin.woff2" as="font" type="font/woff2" crossorigin />
-  
+
   <!-- Primary Meta Tags -->
-  <title>Akbar Azizov | Android Engineer &amp; AI-Mobile Expert</title>
-  <meta name="title" content="Akbar Azizov | Android Engineer &amp; AI-Mobile Expert" />
-  <meta name="description" content="Portfolio of Akbar Azizov. Android Developer focused on building AI-Native mobile products using Kotlin, Compose, and Gemini/OpenAI." />
+  <title>Akbar — Android &amp; AI Engineer</title>
+  <meta name="title" content="Akbar — Android &amp; AI Engineer" />
+  <meta name="description"
+    content="Building intelligent mobile apps with Kotlin & Gemini. Offline-first architecture, 99.9% crash-free stability." />
   <meta name="author" content="Akbar Azizov" />
-  <meta name="keywords" content="Android Developer, Kotlin, Jetpack Compose, AI, Mobile Development, OpenAI, Gemini, Portfolio" />
-  
+  <meta name="keywords"
+    content="Android Developer, Kotlin, Jetpack Compose, AI, Mobile Development, OpenAI, Gemini, Portfolio" />
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://akbarazizov.dev/" />
-  <meta property="og:title" content="Akbar Azizov | Android Engineer" />
-  <meta property="og:description" content="Building AI-Powered Mobile Apps. View selected works and resume." />
+  <meta property="og:title" content="Akbar — Android &amp; AI Engineer" />
+  <meta property="og:description"
+    content="Building intelligent mobile apps with Kotlin & Gemini. Offline-first architecture, 99.9% crash-free stability." />
   <meta property="og:image" content="/og-image.png" />
   <meta property="og:site_name" content="Akbar Azizov Portfolio" />
-  
+
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://akbarazizov.dev/" />
-  <meta name="twitter:title" content="Akbar Azizov | Android Engineer" />
-  <meta name="twitter:description" content="Building AI-Powered Mobile Apps. View selected works and resume." />
+  <meta name="twitter:title" content="Akbar — Android &amp; AI Engineer" />
+  <meta name="twitter:description"
+    content="Building intelligent mobile apps with Kotlin & Gemini. Offline-first architecture, 99.9% crash-free stability." />
   <meta name="twitter:image" content="/og-image.png" />
-  
+
   <!-- Robots -->
   <meta name="robots" content="index, follow" />
-  
+
   <!-- Theme Color - Light and Dark mode support -->
   <meta name="theme-color" content="#f8f9fa" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />

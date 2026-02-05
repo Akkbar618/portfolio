@@ -49,8 +49,7 @@ const HeroText = () => (
             </button>
             <a
                 href={withBase("/CV_Akbar_Azizov_Kotlin&Compose_EN.pdf")}
-                target="_blank"
-                rel="noopener noreferrer"
+                download="Akbar_Azizov_CV.pdf"
                 className="h-12 px-6 bg-transparent border border-gray-900 dark:border-slate-500 text-gray-900 dark:text-slate-200 font-medium rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
             >
                 Download CV
