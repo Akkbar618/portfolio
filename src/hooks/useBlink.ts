@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export const BLINK_ON_DURATION = 3000;
 export const BLINK_OFF_DURATION = 1000;
@@ -19,15 +19,16 @@ export const useBlink = () => {
     const [isVisible, setIsVisible] = useState(() => getBlinkState());
     const [reduceMotion, setReduceMotion] = useState(false);
     const timeoutRef = useRef<number | null>(null);
+    const scheduleNextRef = useRef<() => void>(() => undefined);
 
-    const clearTimer = () => {
+    const clearTimer = useCallback(() => {
         if (timeoutRef.current !== null) {
             window.clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
-    };
+    }, []);
 
-    const scheduleNext = () => {
+    const scheduleNext = useCallback(() => {
         clearTimer();
         const now = Date.now();
         const nextDelay = getNextBlinkDelay(now);
@@ -40,9 +41,13 @@ export const useBlink = () => {
                 const next = getBlinkState();
                 return prev === next ? prev : next;
             });
-            scheduleNext();
+            scheduleNextRef.current();
         }, nextDelay);
-    };
+    }, [clearTimer]);
+
+    useEffect(() => {
+        scheduleNextRef.current = scheduleNext;
+    }, [scheduleNext]);
 
     useEffect(() => {
         if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
@@ -81,7 +86,7 @@ export const useBlink = () => {
             clearTimer();
             document.removeEventListener("visibilitychange", handleVisibility);
         };
-    }, [reduceMotion]);
+    }, [clearTimer, reduceMotion, scheduleNext]);
 
     return isVisible;
 };

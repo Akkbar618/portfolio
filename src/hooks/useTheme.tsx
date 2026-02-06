@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 type ThemeMode = "light" | "dark" | "system";
 type ResolvedTheme = "light" | "dark";
@@ -17,7 +17,9 @@ const getStoredMode = (): ThemeMode => {
         if (stored === "light" || stored === "dark" || stored === "system") {
             return stored;
         }
-    } catch {}
+    } catch {
+        return "system";
+    }
     return "system";
 };
 
@@ -41,7 +43,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         if (typeof window === "undefined") return;
         try {
             window.localStorage.setItem(THEME_STORAGE_KEY, mode);
-        } catch {}
+        } catch {
+            return;
+        }
     }, [mode]);
 
     useEffect(() => {
@@ -69,23 +73,24 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         root.classList.toggle("dark", resolvedTheme === "dark");
     }, [resolvedTheme]);
 
-    const toggleTheme = () => {
+    const toggleTheme = useCallback(() => {
         setMode((prev) => {
             if (prev === "system") {
                 return resolvedTheme === "dark" ? "light" : "dark";
             }
             return "system";
         });
-    };
+    }, [resolvedTheme]);
 
     const value = useMemo(
         () => ({ theme: resolvedTheme, mode, toggleTheme, setTheme: setMode }),
-        [resolvedTheme, mode]
+        [resolvedTheme, mode, toggleTheme]
     );
 
     return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTheme() {
     const context = useContext(ThemeContext);
     if (!context) {
