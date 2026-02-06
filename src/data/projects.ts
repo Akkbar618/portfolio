@@ -26,31 +26,46 @@ type ProjectDetails = Pick<Project, "challenge" | "features" | "screens" | "link
 
 const projectDetails: Record<ProjectSlug, ProjectDetails> = {
   voicebrain: {
-    challenge: "Coming Soon...",
+    challenge:
+      "Customer interviews were full of valuable context, but teams lost details between calls and follow-up tasks. The goal was to turn long voice recordings into concise, searchable outputs without adding friction to the workflow.",
     features: [
       {
-        title: "Coming Soon...",
-        description: "Coming Soon...",
+        title: "Realtime transcription pipeline",
+        description:
+          "Streaming speech-to-text with speaker markers and offline retry support keeps notes reliable even in unstable network conditions.",
+      },
+      {
+        title: "AI action extractor",
+        description:
+          "Summarization flow identifies decisions, owners, and deadlines so teams can export ready-to-use action lists in seconds.",
+      },
+      {
+        title: "Searchable session archive",
+        description:
+          "Room-backed local cache with lightweight indexing makes it fast to find a quote, topic, or task from historical sessions.",
       },
     ],
     screens: [
       {
         id: "vb-1",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-1.png",
+        title: "Session Overview",
+        description:
+          "Daily session timeline with status badges, audio duration, and quick access to latest transcript summaries.",
+        image: "/projects/voicebrain/overview.svg",
       },
       {
         id: "vb-2",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-1.png",
+        title: "Live Transcription",
+        description:
+          "Low-latency transcript stream with speaker separation, confidence cues, and inline correction before publishing.",
+        image: "/projects/voicebrain/transcribe.svg",
       },
       {
         id: "vb-3",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-1.png",
+        title: "AI Insights",
+        description:
+          "Auto-generated key points and follow-up tasks with one-tap sharing to chat, email, or issue tracking tools.",
+        image: "/projects/voicebrain/insights.svg",
       },
     ],
     links: {
@@ -58,31 +73,46 @@ const projectDetails: Record<ProjectSlug, ProjectDetails> = {
     },
   },
   "market-r": {
-    challenge: "Coming Soon...",
+    challenge:
+      "Retail teams had fragmented reports across spreadsheets and messaging threads, making it difficult to react quickly to stock gaps and store-level performance drops.",
     features: [
       {
-        title: "Coming Soon...",
-        description: "Coming Soon...",
+        title: "Store performance dashboard",
+        description:
+          "Realtime KPI widgets show sell-through, out-of-stock trends, and category momentum by region and channel.",
+      },
+      {
+        title: "Catalog health workflow",
+        description:
+          "Data-quality checks highlight missing media, broken pricing, and inventory anomalies before they impact conversion.",
+      },
+      {
+        title: "Alert-driven execution",
+        description:
+          "Priority alerts route issues to the right owner with severity levels, deadlines, and clear resolution history.",
       },
     ],
     screens: [
       {
         id: "mr-1",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-2.png",
+        title: "Revenue Dashboard",
+        description:
+          "Executive view with conversion, basket size, and target attainment split by chain, city, and date range.",
+        image: "/projects/market-r/dashboard.svg",
       },
       {
         id: "mr-2",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-2.png",
+        title: "Catalog Health",
+        description:
+          "Issue feed for assortment completeness and pricing parity with suggested actions and ownership tracking.",
+        image: "/projects/market-r/catalog.svg",
       },
       {
         id: "mr-3",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-2.png",
+        title: "Smart Alerts",
+        description:
+          "Notification center with filters for stockout spikes, promo failures, and critical shelf-compliance risks.",
+        image: "/projects/market-r/alerts.svg",
       },
     ],
     links: {
@@ -90,31 +120,46 @@ const projectDetails: Record<ProjectSlug, ProjectDetails> = {
     },
   },
   "llm-security": {
-    challenge: "Coming Soon...",
+    challenge:
+      "As GenAI features moved into production, teams lacked a practical way to audit prompt attacks and policy drift before incidents reached users.",
     features: [
       {
-        title: "Coming Soon...",
-        description: "Coming Soon...",
+        title: "Prompt attack simulator",
+        description:
+          "Structured test cases for injection, jailbreak, and exfiltration attempts provide repeatable risk scoring per model.",
+      },
+      {
+        title: "Policy compliance checks",
+        description:
+          "Response validation compares outputs against policy rules and flags hallucinations, unsafe advice, and sensitive leakage.",
+      },
+      {
+        title: "Incident timeline",
+        description:
+          "Unified event log with traces and metadata helps teams analyze regressions and verify mitigation rollout quality.",
       },
     ],
     screens: [
       {
         id: "llm-1",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-3.png",
+        title: "Risk Map",
+        description:
+          "Heatmap of model endpoints and attack vectors prioritized by exploitability and expected impact.",
+        image: "/projects/llm-security/risk-map.svg",
       },
       {
         id: "llm-2",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-3.png",
+        title: "Policy Check",
+        description:
+          "Policy control panel showing pass/fail evidence, remediation hints, and confidence levels for each test suite.",
+        image: "/projects/llm-security/policy-check.svg",
       },
       {
         id: "llm-3",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-3.png",
+        title: "Incident Timeline",
+        description:
+          "Chronological stream of prompt sessions, blocked responses, and investigator notes for postmortem analysis.",
+        image: "/projects/llm-security/incident-log.svg",
       },
     ],
     links: {
@@ -122,36 +167,51 @@ const projectDetails: Record<ProjectSlug, ProjectDetails> = {
     },
   },
   loyalist: {
-    challenge: "Coming Soon...",
+    challenge:
+      "Existing loyalty systems were transactional and generic. The product needed to raise retention by making rewards personal, timely, and measurable across mobile campaigns.",
     features: [
       {
-        title: "Coming Soon...",
-        description: "Coming Soon...",
+        title: "Digital rewards wallet",
+        description:
+          "Users can track points, vouchers, and progress toward tier upgrades in one fast-loading, offline-capable mobile screen.",
+      },
+      {
+        title: "Segment-based campaigns",
+        description:
+          "Growth teams launch campaigns by behavior segment and lifecycle stage with reusable templates and scheduling controls.",
+      },
+      {
+        title: "Retention analytics",
+        description:
+          "Dashboards connect campaign actions to repeat purchase rate, redemption lift, and customer lifetime value changes.",
       },
     ],
     screens: [
       {
         id: "loy-1",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-4.png",
+        title: "Rewards Wallet",
+        description:
+          "Personalized wallet shows active offers, tier progress, and one-tap redemption at checkout.",
+        image: "/projects/loyalist/wallet.svg",
       },
       {
         id: "loy-2",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-4.png",
+        title: "Campaign Builder",
+        description:
+          "Campaign creation flow with audience filters, offer previews, and timing controls for rapid iteration.",
+        image: "/projects/loyalist/campaigns.svg",
       },
       {
         id: "loy-3",
-        title: "Coming Soon...",
-        description: "Coming Soon...",
-        image: "/projects/project-placeholder-4.png",
+        title: "Retention Analytics",
+        description:
+          "Cohort and funnel views expose retention gains after targeted offers and loyalty tier nudges.",
+        image: "/projects/loyalist/analytics.svg",
       },
     ],
     links: {
       github: "https://github.com/Akkbar618",
-      playStore: "https://play.google.com",
+      playStore: "https://play.google.com/store/apps",
     },
   },
 };

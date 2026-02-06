@@ -11,39 +11,43 @@ export type ProjectSummary = {
 export const projectsSummary = [
   {
     id: 1,
-    title: "Coming Soon...",
+    title: "VoiceBrain",
     slug: "voicebrain",
-    subtitle: "Coming Soon...",
-    description: "Coming Soon...",
-    image: "/projects/project-placeholder-1.png",
-    technologies: ["Coming Soon..."],
+    subtitle: "AI Voice Notes for Busy Teams",
+    description:
+      "Android app for recording meetings and transforming speech into structured summaries, action items, and follow-up reminders.",
+    image: "/projects/voicebrain/overview.svg",
+    technologies: ["Kotlin", "Jetpack Compose", "Room", "Gemini API"],
   },
   {
     id: 2,
-    title: "Coming Soon...",
+    title: "Market R",
     slug: "market-r",
-    subtitle: "Coming Soon...",
-    description: "Coming Soon...",
-    image: "/projects/project-placeholder-2.png",
-    technologies: ["Coming Soon..."],
+    subtitle: "Retail Intelligence Platform",
+    description:
+      "Field operations dashboard that helps merchandisers track sales, stock health, and store execution from a single mobile workflow.",
+    image: "/projects/market-r/dashboard.svg",
+    technologies: ["Kotlin", "Compose", "Firebase", "Charts"],
   },
   {
     id: 3,
-    title: "Coming Soon...",
+    title: "LLM Security Lab",
     slug: "llm-security",
-    subtitle: "Coming Soon...",
-    description: "Coming Soon...",
-    image: "/projects/project-placeholder-3.png",
-    technologies: ["Coming Soon..."],
+    subtitle: "Prompt and Policy Risk Scanner",
+    description:
+      "Security-focused toolkit for testing prompt injections, data leakage paths, and policy violations in GenAI-enabled workflows.",
+    image: "/projects/llm-security/risk-map.svg",
+    technologies: ["Python", "FastAPI", "OWASP LLM", "OpenTelemetry"],
   },
   {
     id: 4,
-    title: "Coming Soon...",
+    title: "Loyalist",
     slug: "loyalist",
-    subtitle: "Coming Soon...",
-    description: "Coming Soon...",
-    image: "/projects/project-placeholder-4.png",
-    technologies: ["Coming Soon..."],
+    subtitle: "Loyalty and Rewards Experience",
+    description:
+      "Customer retention app with digital loyalty wallet, personalized campaigns, and performance analytics for growth teams.",
+    image: "/projects/loyalist/wallet.svg",
+    technologies: ["Kotlin", "Jetpack Compose", "Clean Architecture", "Firestore"],
   },
 ] as const satisfies ProjectSummary[];
 

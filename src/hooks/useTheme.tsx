@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { storage } from "@/lib/storage";
 
 type ThemeMode = "light" | "dark" | "system";
 type ResolvedTheme = "light" | "dark";
@@ -11,14 +12,10 @@ const getSystemTheme = (): ResolvedTheme => {
 };
 
 const getStoredMode = (): ThemeMode => {
-    if (typeof window === "undefined") return "system";
-    try {
-        const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-        if (stored === "light" || stored === "dark" || stored === "system") {
-            return stored;
-        }
-    } catch {
-        return "system";
+    const stored = storage.getString(THEME_STORAGE_KEY, "system");
+    const normalized = stored.replace(/^"(.*)"$/, "$1");
+    if (normalized === "light" || normalized === "dark" || normalized === "system") {
+        return normalized;
     }
     return "system";
 };
@@ -40,12 +37,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     });
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-        try {
-            window.localStorage.setItem(THEME_STORAGE_KEY, mode);
-        } catch {
-            return;
-        }
+        storage.setString(THEME_STORAGE_KEY, mode);
     }, [mode]);
 
     useEffect(() => {

@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { captureError } from "@/lib/monitoring";
 
 type ErrorBoundaryProps = {
   children: ReactNode;
@@ -17,9 +18,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    if (import.meta.env.DEV) {
-      console.error("ErrorBoundary caught an error", error, info);
-    }
+    captureError(error, {
+      componentStack: info.componentStack,
+      source: "ErrorBoundary",
+    });
   }
 
   handleReload = () => {

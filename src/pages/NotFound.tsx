@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { ROUTES } from "@/constants/routes";
 import ServerLoader from "@/components/ui/ServerLoader";
 
 const NotFound = () => {
@@ -50,7 +51,7 @@ const NotFound = () => {
 
           {/* Action Button */}
           <Link
-            to="/"
+            to={ROUTES.HOME}
             state={{ scrollTo: "home" }}
             className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:scale-105 hover:opacity-90 sm:px-8 sm:py-3 sm:text-base"
           >

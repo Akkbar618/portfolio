@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import type { ProjectStyle } from "@/constants/projectStyles";
 import type { ProjectSummary } from "@/data/projectsSummary";
+import { withBase } from "@/lib/urls";
 
 interface ProjectCardProps {
     project: ProjectSummary;
@@ -9,6 +11,13 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project, style, slideDirection }: ProjectCardProps) => {
     const IconComponent = style.icon;
+    const [imageError, setImageError] = useState(false);
+    const imageSrc = project.image ? withBase(project.image) : "";
+    const showIcon = imageError || !project.image || /placeholder/i.test(project.image);
+
+    useEffect(() => {
+        setImageError(false);
+    }, [project.image]);
 
     return (
         <div
@@ -19,7 +28,20 @@ export const ProjectCard = ({ project, style, slideDirection }: ProjectCardProps
                 className={`w-full md:w-[44%] flex-none ${style.gradient} relative flex items-center justify-center p-8 md:p-12 min-h-[240px] md:min-h-[360px] order-1`}
             >
                 <div className="relative w-36 md:w-48 aspect-[9/19] rounded-[2rem] shadow-2xl overflow-hidden border-4 border-white/20 bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    <IconComponent className="w-14 md:w-16 h-14 md:h-16 text-white/40" strokeWidth={1} />
+                    {showIcon ? (
+                        <IconComponent className="w-14 md:w-16 h-14 md:h-16 text-white/40" strokeWidth={1} />
+                    ) : (
+                        <img
+                            src={imageSrc}
+                            alt={project.title}
+                            loading="lazy"
+                            decoding="async"
+                            width={540}
+                            height={1140}
+                            onError={() => setImageError(true)}
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                 </div>
             </div>
 

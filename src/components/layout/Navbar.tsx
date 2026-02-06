@@ -3,6 +3,7 @@ import { useBlink } from "@/hooks/useBlink";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, Sun, Moon, SunMoon, ChevronDown } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { ROUTES, PROJECT_DETAIL_PREFIX, buildProjectUrl } from "@/constants/routes";
 import { projectsSummary } from "@/data/projectsSummary";
 import { SCROLL_SPY_OFFSET_PX } from "@/constants/ui.constants";
 import {
@@ -24,7 +25,7 @@ const EASTER_CLICKS_REQUIRED = 5;
 const EASTER_CLICK_WINDOW_MS = 1600;
 type NavLinkId = (typeof navLinks)[number]["id"];
 const getDetailActiveSection = (pathname: string): NavLinkId | "" =>
-    pathname.startsWith("/projects/") ? "projects" : "";
+    pathname.startsWith(PROJECT_DETAIL_PREFIX) ? "projects" : "";
 
 type NavbarProps = {
     variant?: "home" | "detail";
@@ -173,10 +174,10 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
         setActiveSection(sectionId);
         setMobileMenuOpen(false);
         closeProjectsMenu();
-        if (location.pathname === "/") {
+        if (location.pathname === ROUTES.HOME) {
             scrollToSection(sectionId);
         } else {
-            navigate("/", { state: { scrollTo: sectionId } });
+            navigate(ROUTES.HOME, { state: { scrollTo: sectionId } });
         }
     };
 
@@ -198,12 +199,12 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
     };
 
     const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        if (location.pathname === "/") {
+        if (location.pathname === ROUTES.HOME) {
             event.preventDefault();
             easterClickCountRef.current += 1;
             if (easterClickCountRef.current >= EASTER_CLICKS_REQUIRED) {
                 resetEasterSequence();
-                navigate("/easter");
+                navigate(ROUTES.EASTER);
                 return;
             }
             scheduleEasterReset();
@@ -375,7 +376,7 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
             <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
                 <div className="flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link
-                        to="/"
+                        to={ROUTES.HOME}
                         state={{ scrollTo: "home" }}
                         onClick={handleLogoClick}
                         className="flex items-center space-x-3"
@@ -428,7 +429,7 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                                                     {projectMenu.map((project) => (
                                                         <Link
                                                             key={project.slug}
-                                                            to={`/projects/${project.slug}`}
+                                                            to={buildProjectUrl(project.slug)}
                                                             onClick={() => {
                                                                 setMobileMenuOpen(false);
                                                                 closeProjectsMenu();
@@ -504,7 +505,7 @@ export const Navbar = ({ variant = "home" }: NavbarProps) => {
                                                         {projectMenu.map((project) => (
                                                             <Link
                                                                 key={project.slug}
-                                                                to={`/projects/${project.slug}`}
+                                                                to={buildProjectUrl(project.slug)}
                                                                 onClick={handleNavClick}
                                                                 className="text-left text-sm text-gray-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors py-1"
                                                             >

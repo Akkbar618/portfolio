@@ -5,6 +5,11 @@ import { TechStack } from "@/components/sections/TechStack";
 import { About } from "@/components/sections/About";
 import { Projects } from "@/components/sections/Projects";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { storage } from "@/lib/storage";
+
+const SCROLL_STORAGE_KEY = "scrollY";
+const SCROLL_WRITE_THROTTLE_MS = 500;
+const IDLE_WRITE_TIMEOUT_MS = 1000;
 
 const Index = () => {
   const location = useLocation();
@@ -34,37 +39,90 @@ const Index = () => {
       navEntry && "type" in navEntry && navEntry.type === "reload";
 
     if (isReload) {
-      const saved = sessionStorage.getItem("scrollY");
-      if (saved) {
-        window.scrollTo({ top: Number(saved), behavior: "auto" });
+      const savedScrollY = storage.get<number>(SCROLL_STORAGE_KEY, 0, { area: "session" });
+      if (savedScrollY > 0) {
+        window.scrollTo({ top: savedScrollY, behavior: "auto" });
       }
     }
   }, []);
 
   useEffect(() => {
-    let rafId = 0;
+    let throttleTimerId: number | null = null;
+    let idleTaskId: number | null = null;
+    let lastWriteAt = 0;
 
-    const saveScroll = () => {
-      sessionStorage.setItem("scrollY", String(window.scrollY));
+    const flushScroll = () => {
+      storage.set(SCROLL_STORAGE_KEY, window.scrollY, { area: "session" });
     };
 
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = window.requestAnimationFrame(() => {
-        rafId = 0;
-        saveScroll();
-      });
+    const cancelIdleTask = () => {
+      if (idleTaskId === null) return;
+      if ("cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleTaskId);
+      } else {
+        window.clearTimeout(idleTaskId);
+      }
+      idleTaskId = null;
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("pagehide", saveScroll);
+    const scheduleIdleFlush = () => {
+      cancelIdleTask();
+
+      if ("requestIdleCallback" in window) {
+        idleTaskId = window.requestIdleCallback(
+          () => {
+            idleTaskId = null;
+            flushScroll();
+          },
+          { timeout: IDLE_WRITE_TIMEOUT_MS }
+        );
+        return;
+      }
+
+      idleTaskId = window.setTimeout(() => {
+        idleTaskId = null;
+        flushScroll();
+      }, 120);
+    };
+
+    const throttledSaveScroll = () => {
+      const now = Date.now();
+      const elapsed = now - lastWriteAt;
+
+      if (elapsed >= SCROLL_WRITE_THROTTLE_MS) {
+        lastWriteAt = now;
+        scheduleIdleFlush();
+        return;
+      }
+
+      if (throttleTimerId !== null) return;
+
+      throttleTimerId = window.setTimeout(() => {
+        throttleTimerId = null;
+        lastWriteAt = Date.now();
+        scheduleIdleFlush();
+      }, SCROLL_WRITE_THROTTLE_MS - elapsed);
+    };
+
+    const handlePageHide = () => {
+      if (throttleTimerId !== null) {
+        window.clearTimeout(throttleTimerId);
+        throttleTimerId = null;
+      }
+      cancelIdleTask();
+      flushScroll();
+    };
+
+    window.addEventListener("scroll", throttledSaveScroll, { passive: true });
+    window.addEventListener("pagehide", handlePageHide);
 
     return () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
+      if (throttleTimerId !== null) {
+        window.clearTimeout(throttleTimerId);
       }
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pagehide", saveScroll);
+      cancelIdleTask();
+      window.removeEventListener("scroll", throttledSaveScroll);
+      window.removeEventListener("pagehide", handlePageHide);
     };
   }, []);
 

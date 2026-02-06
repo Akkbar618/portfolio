@@ -14,11 +14,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "ci": "npm run lint:all && npm run test && npm run build"
+    "analyze": "ANALYZE=true vite build",
+    "check:bundle": "node scripts/check-bundle.js",
+    "ci:full": "npm run lint && npm run test && npm run test:e2e && npm run build && npm run check:bundle",
+    "ci": "npm run lint:all && npm run test && npm run build && npm run check:bundle"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slot": "^1.2.3",
+    "@sentry/react": "^10.38.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.462.0",
@@ -27,7 +31,6 @@
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.30.1",
     "sonner": "^1.7.4",
-    "styled-components": "^6.3.8",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -41,7 +44,6 @@
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.32.0",
@@ -50,6 +52,7 @@
     "globals": "^15.15.0",
     "jsdom": "^20.0.3",
     "postcss": "^8.5.6",
+    "rollup-plugin-visualizer": "^6.0.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",

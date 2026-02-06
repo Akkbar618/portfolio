@@ -1,95 +1,98 @@
-# Portfolio
+# My Portfolio Website
 
-Personal portfolio website showcasing my projects and skills as an Android Engineer & Software Architect. Built with performance, accessibility, and clean architecture in mind.
+Production portfolio built as a **frontend-only SPA** (no backend service in this repository).  
+It is implemented with React + TypeScript and deployed to Vercel.
 
-## Technologies
+## Stack
 
-- **React 18** - UI library with Concurrent features
-- **TypeScript** - Strict type safety
-- **Vite** - High-performance build tool
-- **Tailwind CSS** - Utility-first styling
-- **Shadcn/UI** - Accessible component primitives
-- **React Router v6** - Client-side routing with state management
+- React 18
+- TypeScript
+- Vite
+- React Router v6
+- Tailwind CSS + shadcn/ui
+- Vitest + React Testing Library
+- Playwright
 
-## Key Features & Optimizations
+## Architecture
 
-### ⚡️ Performance
-- **Zero-Layout Shift**: Optimized image loading with explicit dimensions, `decoding="async"`, and `loading="lazy"`.
-- **Bundle Optimization**: Manual chunk splitting in Vite to separate vendor/UI libraries.
-- **Efficient Rendering**: Throttled scroll listeners and `IntersectionObserver` for scroll-spy navigation.
+The app follows a modular structure:
 
-### 🛡️ Type Safety & Reliability
-- **Strict TypeScript**: Full strict mode enabled (`noImplicitAny`, `strictNullChecks`).
-- **Error Boundaries**: Global error catching with graceful fallback UI.
-- **Robust Navigation**: Deep-linking support and scroll position restoration on reload.
+```text
+src/
+  components/
+    layout/       # App shell (navbar/layout wrappers)
+    sections/     # Home page sections
+    project/      # Project-detail page building blocks
+    ui/           # Reusable UI primitives
+  pages/          # Route entries (composition + routing concerns)
+  hooks/          # Reusable stateful logic
+  data/           # Static content/data for projects
+  constants/      # Routes, animation timings, UI constants
+  lib/            # Shared utilities (storage, URLs, monitoring, sanitizers)
+```
 
-### 🎨 UX & Theming
-- **System Theme Sync**: Auto-detects OS theme preference with manual override support.
-- **Smooth Animations**: GPU-accelerated transitions and reduced-motion support.
-- **Touch Gestures**: Custom swipe hooks for touch-optimized carousels.
+Key conventions:
 
-### ♿️ Accessibility
-- **Keyboard Navigation**: Full keyboard support for menus, carousels, and interactive elements.
-- **Semantic HTML**: Proper sectioning and ARIA attributes for screen readers.
+- Keep routing paths in `src/constants/routes.ts`.
+- Keep storage access in `src/lib/storage.ts`.
+- Keep page files thin; move logic into hooks/components.
 
-## Getting Started
+## Local Development
 
-### Prerequisites
+Prerequisites:
 
-- Node.js 18+ 
-- npm or bun
+- Node.js 18+
+- npm
 
-### Installation
+Run locally:
 
 ```bash
-# Clone the repository
-git clone <YOUR_GIT_URL>
-
-# Navigate to project directory
-cd "My Portfolio Website"
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173` by default. To change the port, set `VITE_DEV_PORT`.
+By default Vite runs on `http://localhost:5173`.
 
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run unit tests (Vitest) |
-| `npm run test:e2e` | Run end-to-end tests (Playwright) |
+|---|---|
+| `npm run dev` | Start local dev server |
+| `npm run build` | Build production bundle |
+| `npm run preview` | Preview built bundle locally |
 | `npm run lint` | Run ESLint |
+| `npm run lint:cycles` | Check import cycles |
+| `npm run test` | Run Vitest tests |
+| `npm run test:e2e` | Run Playwright E2E tests |
+| `npm run check:bundle` | Enforce bundle budget |
+| `npm run analyze` | Build with bundle visualizer |
+| `npm run ci:full` | Full CI chain (`lint`, `test`, `test:e2e`, `build`, `check:bundle`) |
 
-## Testing
+## Environment Variables
 
-The project uses a dual testing strategy:
-- **Unit/Integration**: Vitest + React Testing Library for component logic.
-- **E2E**: Playwright for full browser automation and critical flow verification.
+Optional environment variables:
 
-## Project Structure
+- `VITE_SENTRY_DSN` for production monitoring (Sentry).
+- `VITE_SOURCEMAP=true` to emit sourcemaps during build.
 
+## Adding a New Page
+
+1. Create page component in `src/pages/`.
+2. Add route constant in `src/constants/routes.ts`.
+3. Register route in `src/App.tsx` (prefer lazy loading for non-primary pages).
+4. Add navigation entry if required (`src/components/layout/Navbar.tsx`).
+5. Add tests:
+   - Unit/integration tests for page logic.
+   - E2E flow when page is user-facing navigation.
+
+## Quality Gate
+
+Before opening a PR:
+
+```bash
+npm run lint
+npm run lint:cycles
+npm run ci:full
 ```
-src/
-├── components/     # UI components & sections
-│   ├── layout/     # Structural components (Navbar, MainLayout)
-│   ├── sections/   # Landing page sections
-│   └── ui/         # Reusable primitives
-├── pages/          # Route pages (Index, ProjectDetail)
-├── hooks/          # Custom hooks (useTheme, useSwipe, etc.)
-├── data/           # Content & Data models
-├── constants/      # Shared configuration
-├── lib/            # Utilities
-└── main.tsx        # Entry point
-```
 
-## License
-
-MIT
+See `CONTRIBUTING.md` and `docs/RELEASE_CHECKLIST.md` for detailed standards.

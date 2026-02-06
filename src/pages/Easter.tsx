@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { ROUTES } from "@/constants/routes";
+import { parseEasterReport } from "@/lib/easterReport";
 import reportMarkdown from "../../EASTER_PAGE_CHANGELOG.md?raw";
 
 type ConfettiPiece = {
@@ -25,9 +27,12 @@ const CONFETTI_COLORS = [
   "#DC2626",
   "#7C3AED",
 ];
-const CONFETTI_COUNT = 328;
+const DESKTOP_CONFETTI_COUNT = 150;
+const MOBILE_CONFETTI_COUNT = 80;
+const MOBILE_BREAKPOINT_PX = 768;
+const CONFETTI_HIDE_DELAY_MS = 3600;
 
-const createConfettiPieces = (count = CONFETTI_COUNT): ConfettiPiece[] =>
+const createConfettiPieces = (count: number): ConfettiPiece[] =>
   Array.from({ length: count }, (_, id) => ({
     id,
     left: Math.random() * 100,
@@ -56,28 +61,33 @@ const getConfettiStyle = (piece: ConfettiPiece): CSSProperties =>
     ["--confetti-end-rotate" as string]: `${piece.rotate + 620}deg`,
   }) as CSSProperties;
 
-const Easter = () => {
-  const buildVersion = `v${__APP_VERSION__}+${__GIT_COMMIT_SHA__}`;
+const getConfettiCount = (reduceMotion: boolean): number => {
+  if (reduceMotion) return 0;
+  if (typeof window === "undefined") return DESKTOP_CONFETTI_COUNT;
+  return window.innerWidth < MOBILE_BREAKPOINT_PX
+    ? MOBILE_CONFETTI_COUNT
+    : DESKTOP_CONFETTI_COUNT;
+};
+
+type EasterProps = {
+  reportMarkdownOverride?: string;
+  buildVersionOverride?: string;
+};
+
+const Easter = ({
+  reportMarkdownOverride,
+  buildVersionOverride,
+}: EasterProps) => {
+  const buildVersion = buildVersionOverride ?? `v${__APP_VERSION__}+${__GIT_COMMIT_SHA__}`;
+  const reportSource = reportMarkdownOverride ?? reportMarkdown;
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [confettiCount, setConfettiCount] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
-  const confettiPieces = useMemo(() => createConfettiPieces(), []);
-  const { manualVersion, reportBody } = useMemo(() => {
-    const lines = reportMarkdown.replace(/\r\n/g, "\n").split("\n");
-    const firstLine = lines[0]?.trim() ?? "";
-    const versionMatch = firstLine.match(/^version\s*:\s*(.+)$/i);
-
-    if (!versionMatch) {
-      return {
-        manualVersion: buildVersion,
-        reportBody: reportMarkdown,
-      };
-    }
-
-    return {
-      manualVersion: versionMatch[1]?.trim() || buildVersion,
-      reportBody: lines.slice(1).join("\n").replace(/^\n+/, ""),
-    };
-  }, [buildVersion]);
+  const confettiPieces = useMemo(() => createConfettiPieces(confettiCount), [confettiCount]);
+  const { manualVersion, reportBody } = useMemo(
+    () => parseEasterReport(reportSource, buildVersion),
+    [reportSource, buildVersion]
+  );
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
@@ -103,13 +113,29 @@ const Easter = () => {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    const updateConfettiCount = () => {
+      setConfettiCount(getConfettiCount(reduceMotion));
+    };
+
+    updateConfettiCount();
+    if (typeof window === "undefined") return;
+
+    window.addEventListener("resize", updateConfettiCount);
+    return () => window.removeEventListener("resize", updateConfettiCount);
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (confettiCount === 0) {
+      setShowConfetti(false);
+      return;
+    }
+
     setShowConfetti(true);
     const hideTimer = window.setTimeout(() => {
       setShowConfetti(false);
-    }, 3600);
+    }, CONFETTI_HIDE_DELAY_MS);
     return () => window.clearTimeout(hideTimer);
-  }, [reduceMotion]);
+  }, [confettiCount]);
 
   return (
     <MainLayout
@@ -158,13 +184,13 @@ const Easter = () => {
             </div>
             <div className="rounded-2xl border border-gray-200 dark:border-slate-700 p-4 bg-gray-50 dark:bg-slate-800/60">
               <p className="text-xs text-gray-500 dark:text-slate-400">Route</p>
-              <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">/easter</p>
+              <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">{ROUTES.EASTER}</p>
             </div>
           </div>
 
           <div className="mt-6">
             <Link
-              to="/"
+              to={ROUTES.HOME}
               state={{ scrollTo: "home" }}
               className="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 dark:border-slate-700 text-sm font-medium hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
             >

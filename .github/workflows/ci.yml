@@ -21,22 +21,13 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
       - name: Check import cycles
         run: npm run lint:cycles
-
-      - name: Tests
-        run: npm run test
-
-      - name: Build
-        run: npm run build
-        env:
-          VITE_SOURCEMAP: "true"
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: E2E Smoke
-        run: npm run test:e2e
+      - name: Full CI pipeline
+        run: npm run ci:full
+        env:
+          VITE_SOURCEMAP: "true"

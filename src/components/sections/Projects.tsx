@@ -1,87 +1,30 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, type KeyboardEvent, type WheelEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ANIMATION_DELAYS } from "@/constants/animation.constants";
 import { CAROUSEL_AUTO_SCROLL_INTERVAL_MS } from "@/constants/ui.constants";
+import { buildProjectUrl } from "@/constants/routes";
 import { projectsSummary } from "@/data/projectsSummary";
 import { projectStylesList } from "@/constants/projectStyles";
+import { useCarouselController } from "@/hooks/useCarouselController";
 import { useSwipe } from "@/hooks/useSwipe";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const projectList = projectsSummary;
 
 export const Projects = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('left');
     const totalProjects = projectList.length;
-    const intervalRef = useRef<number | null>(null);
-
-    const startAutoScroll = useCallback(() => {
-        if (totalProjects === 0) return;
-        if (intervalRef.current) {
-            window.clearInterval(intervalRef.current);
-        }
-        intervalRef.current = window.setInterval(() => {
-            setSlideDirection('left');
-            setCurrentIndex((prev) => (prev + 1) % totalProjects);
-        }, CAROUSEL_AUTO_SCROLL_INTERVAL_MS);
-    }, [totalProjects]);
-
-    const resetAutoScroll = useCallback(() => {
-        startAutoScroll();
-    }, [startAutoScroll]);
-
-    const goToIndex = useCallback((newIndex: number, direction: 'left' | 'right') => {
-        setSlideDirection(direction);
-        if (newIndex < 0) {
-            setCurrentIndex(totalProjects - 1);
-        } else if (newIndex >= totalProjects) {
-            setCurrentIndex(0);
-        } else {
-            setCurrentIndex(newIndex);
-        }
-        resetAutoScroll();
-    }, [resetAutoScroll, totalProjects]);
-
-    const handleNext = useCallback(() => {
-        setSlideDirection('left');
-        setCurrentIndex((prev) => (prev + 1) % totalProjects);
-        resetAutoScroll();
-    }, [resetAutoScroll, totalProjects]);
-
-    const handlePrev = useCallback(() => {
-        setSlideDirection('right');
-        setCurrentIndex((prev) => (prev - 1 + totalProjects) % totalProjects);
-        resetAutoScroll();
-    }, [resetAutoScroll, totalProjects]);
-
-    // Auto-scroll - stable interval that restarts when tab becomes visible
-    useEffect(() => {
-        if (totalProjects === 0) return;
-
-        startAutoScroll();
-
-        const handleVisibility = () => {
-            if (document.visibilityState === 'visible') {
-                startAutoScroll();
-            } else if (intervalRef.current) {
-                window.clearInterval(intervalRef.current);
-                intervalRef.current = null;
-            }
-        };
-        document.addEventListener('visibilitychange', handleVisibility);
-
-        return () => {
-            if (intervalRef.current) {
-                window.clearInterval(intervalRef.current);
-                intervalRef.current = null;
-            }
-            document.removeEventListener('visibilitychange', handleVisibility);
-        };
-    }, [startAutoScroll, totalProjects]);
-
-    // (intentionally no dropdown-driven carousel selection)
+    const {
+        currentIndex,
+        slideDirection,
+        handleNext,
+        handlePrev,
+        goToIndex,
+    } = useCarouselController({
+        totalItems: totalProjects,
+        autoScrollMs: CAROUSEL_AUTO_SCROLL_INTERVAL_MS,
+    });
 
     // Navigate to project detail
     const navigate = useNavigate();
@@ -89,7 +32,7 @@ export const Projects = () => {
     const handleCardTap = useCallback(() => {
         const targetProject = projectList[currentIndex];
         if (targetProject) {
-            navigate(`/projects/${targetProject.slug}`);
+            navigate(buildProjectUrl(targetProject.slug));
         }
     }, [currentIndex, navigate]);
 
@@ -99,18 +42,18 @@ export const Projects = () => {
         onTap: handleCardTap,
     });
 
-    const handleCardKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleCardKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             const targetProject = projectList[currentIndex];
             if (targetProject) {
-                navigate(`/projects/${targetProject.slug}`);
+                navigate(buildProjectUrl(targetProject.slug));
             }
         }
     }, [currentIndex, navigate]);
 
     // Wheel scroll
-    const handleWheel = useCallback((e: React.WheelEvent) => {
+    const handleWheel = useCallback((e: WheelEvent) => {
         if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
             e.preventDefault();
             if (e.deltaX > 30) {
@@ -177,6 +120,10 @@ export const Projects = () => {
                         >
                             <ChevronRight className="w-6 h-6 text-gray-900 dark:text-white" strokeWidth={2} />
                         </button>
+                    </div>
+
+                    <div aria-live="polite" aria-atomic="true" className="sr-only">
+                        Project {currentIndex + 1} of {totalProjects}: {project.title}
                     </div>
 
                     {/* Visual swipe hint on mobile - card edge peeking */}

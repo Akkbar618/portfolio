@@ -1,129 +1,10 @@
-import styled from "styled-components";
-
-const StyledWrapper = styled.div`
-  #svg-global {
-    zoom: 1.2;
-    overflow: visible;
-  }
-
-  @keyframes fade-particles {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
-
-  @keyframes floatUp {
-    0% {
-      transform: translateY(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-40px);
-      opacity: 0;
-    }
-  }
-
-  #particles {
-    animation: fade-particles 5s infinite alternate;
-  }
-  .particle {
-    animation: floatUp linear infinite;
-  }
-
-  .p1 {
-    animation-duration: 2.2s;
-    animation-delay: 0s;
-  }
-  .p2 {
-    animation-duration: 2.5s;
-    animation-delay: 0.3s;
-  }
-  .p3 {
-    animation-duration: 2s;
-    animation-delay: 0.6s;
-  }
-  .p4 {
-    animation-duration: 2.8s;
-    animation-delay: 0.2s;
-  }
-  .p5 {
-    animation-duration: 2.3s;
-    animation-delay: 0.4s;
-  }
-  .p6 {
-    animation-duration: 3s;
-    animation-delay: 0.1s;
-  }
-  .p7 {
-    animation-duration: 2.1s;
-    animation-delay: 0.5s;
-  }
-  .p8 {
-    animation-duration: 2.6s;
-    animation-delay: 0.2s;
-  }
-  .p9 {
-    animation-duration: 2.4s;
-    animation-delay: 0.3s;
-  }
-
-  @keyframes bounce-lines {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-3px);
-    }
-  }
-
-  #line-v1,
-  #line-v2,
-  #node-server,
-  #panel-rigth,
-  #reflectores,
-  #particles {
-    animation: bounce-lines 3s ease-in-out infinite alternate;
-  }
-  #line-v2 {
-    animation-delay: 0.2s;
-  }
-
-  #node-server,
-  #panel-rigth,
-  #reflectores,
-  #particles {
-    animation-delay: 0.4s;
-  }
-
-  /* Respect reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    #particles,
-    .particle,
-    #line-v1,
-    #line-v2,
-    #node-server,
-    #panel-rigth,
-    #reflectores {
-      animation: none;
-    }
-  }
-`;
-
 /**
  * Animated server loading indicator with floating particles
  * Used on 404 error pages to provide visual feedback
  */
 const ServerLoader = () => {
   return (
-    <StyledWrapper>
+    <div className="server-loader">
       <svg
         id="svg-global"
         xmlns="http://www.w3.org/2000/svg"
@@ -457,7 +338,7 @@ const ServerLoader = () => {
           </linearGradient>
         </defs>
       </svg>
-    </StyledWrapper>
+    </div>
   );
 };
 

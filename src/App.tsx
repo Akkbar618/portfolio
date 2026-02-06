@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ROUTES } from "@/constants/routes";
 import Index from "./pages/Index";
 import { useDynamicFavicon } from "./hooks/useDynamicFavicon";
 import { ThemeProvider } from "./hooks/useTheme";
@@ -27,9 +28,9 @@ const App = () => {
           >
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/projects/:slug" element={<ProjectDetail />} />
-                <Route path="/easter" element={<Easter />} />
+                <Route path={ROUTES.HOME} element={<Index />} />
+                <Route path={ROUTES.PROJECT_DETAIL} element={<ProjectDetail />} />
+                <Route path={ROUTES.EASTER} element={<Easter />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
