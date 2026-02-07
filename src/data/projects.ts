@@ -25,193 +25,169 @@ export interface Project extends ProjectSummary {
 type ProjectDetails = Pick<Project, "challenge" | "features" | "screens" | "links">;
 
 const projectDetails: Record<ProjectSlug, ProjectDetails> = {
-  voicebrain: {
+  "quiz-learnwords": {
     challenge:
-      "Customer interviews were full of valuable context, but teams lost details between calls and follow-up tasks. The goal was to turn long voice recordings into concise, searchable outputs without adding friction to the workflow.",
+      "Learning new vocabulary requires consistent practice and repetition. The goal was to create an engaging quiz-based app that makes memorization fun and tracks progress over time.",
     features: [
       {
-        title: "Realtime transcription pipeline",
+        title: "Interactive quizzes",
         description:
-          "Streaming speech-to-text with speaker markers and offline retry support keeps notes reliable even in unstable network conditions.",
+          "Multiple quiz formats including multiple choice, typing, and flashcards to reinforce vocabulary learning.",
       },
       {
-        title: "AI action extractor",
+        title: "Progress tracking",
         description:
-          "Summarization flow identifies decisions, owners, and deadlines so teams can export ready-to-use action lists in seconds.",
+          "Detailed statistics show mastery level per word, study streaks, and areas that need more practice.",
       },
       {
-        title: "Searchable session archive",
+        title: "Custom word lists",
         description:
-          "Room-backed local cache with lightweight indexing makes it fast to find a quote, topic, or task from historical sessions.",
+          "Import or create custom word lists for different languages or specialized vocabulary sets.",
       },
     ],
     screens: [
       {
-        id: "vb-1",
-        title: "Session Overview",
+        id: "ql-1",
+        title: "Quiz Screen",
         description:
-          "Daily session timeline with status badges, audio duration, and quick access to latest transcript summaries.",
-        image: "/projects/voicebrain/overview.svg",
-      },
-      {
-        id: "vb-2",
-        title: "Live Transcription",
-        description:
-          "Low-latency transcript stream with speaker separation, confidence cues, and inline correction before publishing.",
-        image: "/projects/voicebrain/transcribe.svg",
-      },
-      {
-        id: "vb-3",
-        title: "AI Insights",
-        description:
-          "Auto-generated key points and follow-up tasks with one-tap sharing to chat, email, or issue tracking tools.",
-        image: "/projects/voicebrain/insights.svg",
+          "Main quiz interface with word cards, answer options, and real-time feedback.",
+        image: "/projects/quiz-learnwords/placeholder.png",
       },
     ],
     links: {
-      github: "https://github.com/Akkbar618",
-    },
-  },
-  "market-r": {
-    challenge:
-      "Retail teams had fragmented reports across spreadsheets and messaging threads, making it difficult to react quickly to stock gaps and store-level performance drops.",
-    features: [
-      {
-        title: "Store performance dashboard",
-        description:
-          "Realtime KPI widgets show sell-through, out-of-stock trends, and category momentum by region and channel.",
-      },
-      {
-        title: "Catalog health workflow",
-        description:
-          "Data-quality checks highlight missing media, broken pricing, and inventory anomalies before they impact conversion.",
-      },
-      {
-        title: "Alert-driven execution",
-        description:
-          "Priority alerts route issues to the right owner with severity levels, deadlines, and clear resolution history.",
-      },
-    ],
-    screens: [
-      {
-        id: "mr-1",
-        title: "Revenue Dashboard",
-        description:
-          "Executive view with conversion, basket size, and target attainment split by chain, city, and date range.",
-        image: "/projects/market-r/dashboard.svg",
-      },
-      {
-        id: "mr-2",
-        title: "Catalog Health",
-        description:
-          "Issue feed for assortment completeness and pricing parity with suggested actions and ownership tracking.",
-        image: "/projects/market-r/catalog.svg",
-      },
-      {
-        id: "mr-3",
-        title: "Smart Alerts",
-        description:
-          "Notification center with filters for stockout spikes, promo failures, and critical shelf-compliance risks.",
-        image: "/projects/market-r/alerts.svg",
-      },
-    ],
-    links: {
-      github: "https://github.com/Akkbar618",
-    },
-  },
-  "llm-security": {
-    challenge:
-      "As GenAI features moved into production, teams lacked a practical way to audit prompt attacks and policy drift before incidents reached users.",
-    features: [
-      {
-        title: "Prompt attack simulator",
-        description:
-          "Structured test cases for injection, jailbreak, and exfiltration attempts provide repeatable risk scoring per model.",
-      },
-      {
-        title: "Policy compliance checks",
-        description:
-          "Response validation compares outputs against policy rules and flags hallucinations, unsafe advice, and sensitive leakage.",
-      },
-      {
-        title: "Incident timeline",
-        description:
-          "Unified event log with traces and metadata helps teams analyze regressions and verify mitigation rollout quality.",
-      },
-    ],
-    screens: [
-      {
-        id: "llm-1",
-        title: "Risk Map",
-        description:
-          "Heatmap of model endpoints and attack vectors prioritized by exploitability and expected impact.",
-        image: "/projects/llm-security/risk-map.svg",
-      },
-      {
-        id: "llm-2",
-        title: "Policy Check",
-        description:
-          "Policy control panel showing pass/fail evidence, remediation hints, and confidence levels for each test suite.",
-        image: "/projects/llm-security/policy-check.svg",
-      },
-      {
-        id: "llm-3",
-        title: "Incident Timeline",
-        description:
-          "Chronological stream of prompt sessions, blocked responses, and investigator notes for postmortem analysis.",
-        image: "/projects/llm-security/incident-log.svg",
-      },
-    ],
-    links: {
-      github: "https://github.com/Akkbar618",
+      github: "https://github.com/Akkbar618/Quiz_LearnWords",
     },
   },
   loyalist: {
     challenge:
-      "Existing loyalty systems were transactional and generic. The product needed to raise retention by making rewards personal, timely, and measurable across mobile campaigns.",
+      "Service businesses needed a modern loyalty system that goes beyond simple point collection to create personalized customer experiences and measurable retention improvements.",
     features: [
       {
         title: "Digital rewards wallet",
         description:
-          "Users can track points, vouchers, and progress toward tier upgrades in one fast-loading, offline-capable mobile screen.",
+          "Customers track points, vouchers, and tier progress in a fast-loading, offline-capable mobile screen.",
       },
       {
-        title: "Segment-based campaigns",
+        title: "Campaign management",
         description:
-          "Growth teams launch campaigns by behavior segment and lifecycle stage with reusable templates and scheduling controls.",
+          "Business owners create targeted campaigns with audience filters, offer previews, and scheduling controls.",
       },
       {
         title: "Retention analytics",
         description:
-          "Dashboards connect campaign actions to repeat purchase rate, redemption lift, and customer lifetime value changes.",
+          "Dashboards connect campaign actions to repeat visits, redemption rates, and customer lifetime value.",
       },
     ],
     screens: [
       {
         id: "loy-1",
-        title: "Rewards Wallet",
+        title: "Rewards Dashboard",
         description:
-          "Personalized wallet shows active offers, tier progress, and one-tap redemption at checkout.",
-        image: "/projects/loyalist/wallet.svg",
-      },
-      {
-        id: "loy-2",
-        title: "Campaign Builder",
-        description:
-          "Campaign creation flow with audience filters, offer previews, and timing controls for rapid iteration.",
-        image: "/projects/loyalist/campaigns.svg",
-      },
-      {
-        id: "loy-3",
-        title: "Retention Analytics",
-        description:
-          "Cohort and funnel views expose retention gains after targeted offers and loyalty tier nudges.",
-        image: "/projects/loyalist/analytics.svg",
+          "Overview of active rewards, point balance, and available offers.",
+        image: "/projects/loyalist/placeholder.png",
       },
     ],
     links: {
-      github: "https://github.com/Akkbar618",
-      playStore: "https://play.google.com/store/apps",
+      github: "https://github.com/Akkbar618/LoyalistTest",
+    },
+  },
+  voicenotes: {
+    challenge:
+      "Voice recordings are useful but hard to search and organize. The app transforms spoken thoughts into structured, searchable notes with AI-generated summaries.",
+    features: [
+      {
+        title: "One-tap recording",
+        description:
+          "Start recording instantly with visual feedback and automatic silence detection.",
+      },
+      {
+        title: "AI transcription",
+        description:
+          "Automatic speech-to-text conversion with support for multiple AI providers (Gemini, OpenAI).",
+      },
+      {
+        title: "Smart summaries",
+        description:
+          "AI-generated titles and key points for each note, making it easy to find important information.",
+      },
+    ],
+    screens: [
+      {
+        id: "vn-1",
+        title: "Recording Screen",
+        description:
+          "Main recording interface with waveform visualization and quick actions.",
+        image: "/projects/voicenotes/placeholder.png",
+      },
+    ],
+    links: {
+      github: "https://github.com/Akkbar618/VoiceNotes",
+    },
+  },
+  secbench: {
+    challenge:
+      "As LLMs move into production, teams need systematic ways to test for prompt injection vulnerabilities and evaluate defense effectiveness before incidents reach users.",
+    features: [
+      {
+        title: "Jailbreak attack library",
+        description:
+          "Curated dataset of adversarial prompts covering multiple attack categories and jailbreak templates.",
+      },
+      {
+        title: "T.R.I.A.D. defense system",
+        description:
+          "Three-layer defense architecture designed to detect and block malicious inputs before they reach the model.",
+      },
+      {
+        title: "Benchmark reports",
+        description:
+          "Detailed metrics comparing protected vs unprotected configurations with pass/fail evidence per test case.",
+      },
+    ],
+    screens: [
+      {
+        id: "sb-1",
+        title: "Benchmark Dashboard",
+        description:
+          "Overview of test results, attack success rates, and defense effectiveness metrics.",
+        image: "/projects/secbench/placeholder.png",
+      },
+    ],
+    links: {
+      github: "https://github.com/Akkbar618/secbench-25",
+    },
+  },
+  "money-manager": {
+    challenge:
+      "Personal finance tracking apps are often overcomplicated. This pet project focuses on simplicity — quick expense entry, clear category breakdowns, and useful charts.",
+    features: [
+      {
+        title: "Quick expense entry",
+        description:
+          "Add transactions in seconds with smart category suggestions and recent entries.",
+      },
+      {
+        title: "Budget tracking",
+        description:
+          "Set monthly budgets per category and get visual progress indicators.",
+      },
+      {
+        title: "Charts and insights",
+        description:
+          "Visual breakdowns of spending patterns by category, time period, and trends.",
+      },
+    ],
+    screens: [
+      {
+        id: "mm-1",
+        title: "Dashboard",
+        description:
+          "Main screen with balance overview, recent transactions, and spending chart.",
+        image: "/projects/money-manager/placeholder.png",
+      },
+    ],
+    links: {
+      github: "https://github.com/Akkbar618/Money_Manager_20",
     },
   },
 };
