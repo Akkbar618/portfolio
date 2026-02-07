@@ -2,6 +2,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ROUTES } from "@/constants/routes";
@@ -36,6 +37,7 @@ const App = () => {
               </Routes>
             </Suspense>
           </BrowserRouter>
+          <SpeedInsights />
         </ErrorBoundary>
       </HelmetProvider>
     </ThemeProvider>
